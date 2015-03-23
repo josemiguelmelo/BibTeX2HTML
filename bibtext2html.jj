@@ -23,9 +23,55 @@ TOKEN :
 	< CONCAT : "#" > |
 	< QUOTE : "\"" > |
 	< COMMA : "," > |
-	< INTEGER : (["0" - "9"])+ > 
-	| < LF : "\n" >
+
+	< ARTICLE : "@article" > | 
+	< BOOK : "@book" > |
+	< BOOKLET : "@booklet" > |
+	< CONFERENCE : "@conference" > |
+	< INBOOK : "@inbook" > |
+	< INCOLLECTION : "@incollection" > |
+	< INPROCEEDINGS : "@inproceedings" > |
+	< MANUAL : "@manual" > |
+	< MASTERTHESIS : "@masterthesis" > |
+	< MISC : "@misc" > |
+	< PHDTHESIS : "@phdthesis" > |
+	< PROCEEDINGS : "@proceedings" > |
+	< TECHREPORT : "@techreport" > |
+	< UNPUBLISHED : "@unpublished" > |
+
+
+	< AUTHOR : "author" > |
+	< TITLE : "title" > |
+	< YEAR : "year" > |
+	< NUMBER : "number" > |
+	< PAGES : "pages" > |
+	< MONTH : "month" > |
+	< NOTE : "note" > |
+	< KEY : "key" > |
+	< EDITOR : "editor" > |
+	< PUBLISHER : "publisher" > |
+	< ADDRESS : "address" > |
+	< SERIES : "series" > |
+	< EDITION : "edition" > |
+	< HOWPUBLISHED : "howpublished" > |
+	< CHAPTER : "chapter" > |
+	< TYPE : "type" > |
+	< ANNOTE : "annote" > |
+	< BOOKTITLE : "booktitle" > |
+	< CROSSREF : "crossref" > |
+	< INSTITUTION : "institution" > |
+	< JOURNAL : "journal" > |
+	< NUMBER : "number" > |
+	< ORGANIZATION : "organization" > |
+	< SCHOOL : "school" > |
+	< VOLUME : "volume" > |
+
+	< CHARACTER : (["a"-"z", "A"-"Z"])+> |
+	< INTEGER : (["0" - "9"])+ > |
+
+	< LF : "\n" >
 }
+
 
 void Aritm() : {}
 {
