@@ -61,7 +61,6 @@ TOKEN :
 	< CROSSREF : "crossref" > |
 	< INSTITUTION : "institution" > |
 	< JOURNAL : "journal" > |
-	< NUMBER : "number" > |
 	< ORGANIZATION : "organization" > |
 	< SCHOOL : "school" > |
 	< VOLUME : "volume" > |
@@ -75,5 +74,6 @@ TOKEN :
 
 void Aritm() : {}
 {
-	<INTEGER> ( ("+" | "-") <INTEGER> )? <LF>
+	//<INTEGER> ( ("+" | "-") <INTEGER> )? <LF>
+	<ARTICLE> <OPEN_BRACKET> <CHARACTER> <CLOSE_BRACKET> <LF>
 }

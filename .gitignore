@@ -6,3 +6,5 @@ jjrun
 jjtree
 jjtree.bat
 /lib
+*.java
+*.class
