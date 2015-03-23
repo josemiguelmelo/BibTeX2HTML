@@ -15,3 +15,9 @@ string,inteiro,data
 @article, @book, @booklet, @conference, @inbook, @incollection, @inproceedings, @manual, @masterthesis, @misc, @phdthesis, @proceedings, @techreport, @unpublished
 
 author,note,key,date,month,year,title,address,howpublished,series,number,volume,author,editor,publisher,journal,...
+
+
+Exemplo
+@article {
+	
+}

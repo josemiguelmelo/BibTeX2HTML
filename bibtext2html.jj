@@ -1,0 +1,33 @@
+PARSER_BEGIN(BibTex)
+
+	public class BibTex {
+		public static void main(String args[]) throws ParseException {
+
+			BibTex parser = new BibTex(System.in);
+			parser.Aritm();
+		}
+	}
+
+PARSER_END(BibTex)
+
+SKIP :
+{
+	" " | "\t" | "\r"
+}
+
+TOKEN :
+{
+	< OPEN_BRACKET : "{" > |
+	< CLOSE_BRACKET : "}" > |
+	< EQUAL : "=" > |
+	< CONCAT : "#" > |
+	< QUOTE : "\"" > |
+	< COMMA : "," > |
+	< INTEGER : (["0" - "9"])+ > 
+	| < LF : "\n" >
+}
+
+void Aritm() : {}
+{
+	<INTEGER> ( ("+" | "-") <INTEGER> )? <LF>
+}
