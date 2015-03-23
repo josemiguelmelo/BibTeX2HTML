@@ -1,0 +1,17 @@
+Tokens de aceitação da linguagem
+
+Tokens: 
+
+{ -> abrir chaveta
+} -> fechar chaveta
+= -> igualdade
+# -> concatenação algo dentro de aspas ou chavetas
+" -> abrir aspas
+" -> fechar aspas
+, -> enumeração
+
+string,inteiro,data
+
+@article, @book, @booklet, @conference, @inbook, @incollection, @inproceedings, @manual, @masterthesis, @misc, @phdthesis, @proceedings, @techreport, @unpublished
+
+author,note,key,date,month,year,title,address,howpublished,series,number,volume,author,editor,publisher,journal,...
