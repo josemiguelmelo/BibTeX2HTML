@@ -74,6 +74,8 @@ TOKEN :
 
 void Aritm() : {}
 {
-	//<INTEGER> ( ("+" | "-") <INTEGER> )? <LF>
 	<ARTICLE> <OPEN_BRACKET> <CHARACTER> <CLOSE_BRACKET> <LF>
 }
+
+
+
