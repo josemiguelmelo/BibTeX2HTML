@@ -1,0 +1,149 @@
+options {
+	LOOKAHEAD=2;
+}
+
+PARSER_BEGIN(BibTex)
+
+	public class BibTex {
+		public static void main(String args[]) throws ParseException {
+
+			System.out.println("Working Directory = " +
+              System.getProperty("user.dir"));
+
+			try{
+				BibTex parser = new BibTex(new java.io.FileInputStream("C:\\Users\\Tiago\\Desktop\\COMP\\BibTeX2HTML\\lol.bib"));
+				SimpleNode root = parser.Start();
+
+				root.dump("");
+			}
+			
+	        catch(java.io.FileNotFoundException e) {
+	          System.out.println ("The file was not found.");
+	          return;
+	        }
+		}
+	}
+
+PARSER_END(BibTex)
+
+SKIP :
+{
+	" " | "\t" | "\r" | "\n"
+}
+
+TOKEN :
+{
+	< OPEN_BRACKET : "{" > |
+	< CLOSE_BRACKET : "}" > |
+	< EQUAL : "=" > |
+	< CONCAT : "#" > |
+	< QUOTE : "\"" > |
+	< COMMA : "," > |
+
+	< ARTICLE : "@article" > | 
+	< BOOK : "@book" > |
+	< BOOKLET : "@booklet" > |
+	< CONFERENCE : "@conference" > |
+	< INBOOK : "@inbook" > |
+	< INCOLLECTION : "@incollection" > |
+	< INPROCEEDINGS : "@inproceedings" > |
+	< MANUAL : "@manual" > |
+	< MASTERTHESIS : "@masterthesis" > |
+	< MISC : "@misc" > |
+	< PHDTHESIS : "@phdthesis" > |
+	< PROCEEDINGS : "@proceedings" > |
+	< TECHREPORT : "@techreport" > |
+	< UNPUBLISHED : "@unpublished" > |
+
+
+	< AUTHOR : "author" > |
+	< TITLE : "title" > |
+	< YEAR : "year" > |
+	< NUMBER : "number" > |
+	< PAGES : "pages" > |
+	< MONTH : "month" > |
+	< NOTE : "note" > |
+	< KEY : "key" > |
+	< EDITOR : "editor" > |
+	< PUBLISHER : "publisher" > |
+	< ADDRESS : "address" > |
+	< SERIES : "series" > |
+	< EDITION : "edition" > |
+	< HOWPUBLISHED : "howpublished" > |
+	< CHAPTER : "chapter" > |
+	< TYPE : "type" > |
+	< ANNOTE : "annote" > |
+	< BOOKTITLE : "booktitle" > |
+	< CROSSREF : "crossref" > |
+	< INSTITUTION : "institution" > |
+	< JOURNAL : "journal" > |
+	< ORGANIZATION : "organization" > |
+	< SCHOOL : "school" > |
+	< VOLUME : "volume" > |
+	< DIGITS : (["0" - "9"])+ >
+
+}
+
+TOKEN :
+{
+	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <QUOTE>) 
+		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+) >
+}
+
+
+SimpleNode Start() : {}
+{
+	Expr() {return jjtThis;}
+}
+
+void Expr() : {}
+{
+
+	ArticleExpr() 
+	| 
+	BookExpr()
+	
+}
+
+void ArticleExpr() : {Token id;}
+{
+	<ARTICLE>
+		<OPEN_BRACKET>
+		
+		id = <STRING>
+
+		{System.out.println("Article id = " + id.image + "\n");}
+
+		<COMMA>
+
+		ArticleRequirements()
+
+		(ArticleOptional())*
+		(<COMMA>)?
+
+
+	 	<CLOSE_BRACKET>
+}
+
+void BookExpr() : {}
+{
+	<BOOK>
+		<OPEN_BRACKET>
+
+	 	<CLOSE_BRACKET>
+}
+
+void ArticleRequirements(): {}
+{
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<JOURNAL> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>
+}
+
+void ArticleOptional(): {}
+{
+	<COMMA> // last fixed
+	(<VOLUME> | <NUMBER> | <PAGES> | <MONTH> | <NOTE> | <KEY>)
+	<EQUAL> <STRING>
+}
