@@ -91,7 +91,8 @@ TOKEN :
 TOKEN :
 {
 	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <QUOTE>) 
-		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+) >
+		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+
+		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <CLOSE_BRACKET>))>
 }
 
 
