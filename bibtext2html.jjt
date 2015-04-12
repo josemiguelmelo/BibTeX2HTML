@@ -94,6 +94,10 @@ TOKEN :
 	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <QUOTE>) 
 		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+
 		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <CLOSE_BRACKET>))>
+
+	|
+
+	< PAGESINPUT : <QUOTE><DIGITS>(("-"|",")<DIGITS>)?<QUOTE> >
 }
 
 
@@ -112,6 +116,10 @@ void Expr() : {}
 	BookletExpr()
 	|
 	ConferenceExpr()
+	|
+	InbookExpr()
+	|
+	IncollectionExpr()
 	)*
 	
 }
@@ -148,8 +156,10 @@ void ArticleRequirements(): {}
 void ArticleOptional(): {}
 {
 	<COMMA> // last fixed
-	(<VOLUME> | <NUMBER> | <PAGES> | <MONTH> | <NOTE> | <KEY>)
-	<EQUAL> <STRING>
+	( 
+		((<VOLUME> | <NUMBER> | <MONTH> | <NOTE> | <KEY>) <EQUAL> <STRING>)  |
+		<PAGES> <EQUAL> <PAGESINPUT> 
+	)
 }
 
 
@@ -267,7 +277,91 @@ void ConferenceRequirements() : {Token author;}
 void ConferenceOptional(): {}
 {
 	<COMMA>
-	(<EDITOR> | <VOLUME> | <SERIES> | <PAGES> | <ADDRESS> | <MONTH> | <ORGANIZATION> | <PUBLISHER> | <CROSSREF> | <NOTE> )
+	(
+	( (<EDITOR> | <VOLUME> | <SERIES> | <ADDRESS> | <MONTH> | <ORGANIZATION> | <PUBLISHER> | <CROSSREF> | <NOTE> ) <EQUAL> <STRING> ) |
+		( <PAGES> <EQUAL> <PAGESINPUT>)
+	)
+}
+
+
+/** INBOOK **/
+
+void InbookExpr() : {Token id;}
+{
+	<INBOOK>
+	<OPEN_BRACKET>
+		id = <STRING>
+
+		{ System.out.println("Inbook id = " + id.image + "\n"); }
+
+		<COMMA>
+
+		InbookRequirements()
+		(InbookOptional())*
+		(<COMMA>)?
+
+	<CLOSE_BRACKET>
+}
+
+
+void InbookRequirements() : {Token author;}
+{
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<CHAPTER> <EQUAL> <STRING> <COMMA>
+	<PUBLISHER> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>
+}
+
+
+void InbookOptional(): {}
+{
+	<COMMA>
+	(<VOLUME> | <SERIES> | <TYPE> | <ADDRESS> | <MONTH> | <EDITION> | <CROSSREF> | <NOTE> )
 	<EQUAL> <STRING>
+}
+
+
+
+
+/** INCOLLECTION **/
+
+void IncollectionExpr() : {Token id;}
+{
+	<INCOLLECTION>
+	<OPEN_BRACKET>
+		id = <STRING>
+
+		{ System.out.println("Incollection id = " + id.image + "\n"); }
+
+		<COMMA>
+
+		IncollectionRequirements()
+		(IncollectionOptional())*
+		(<COMMA>)?
+
+	<CLOSE_BRACKET>
+}
+
+
+void IncollectionRequirements() : {}
+{
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<BOOKTITLE> <EQUAL> <STRING> <COMMA>
+	<PUBLISHER> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>
+}
+
+
+void IncollectionOptional(): {}
+{
+	<COMMA>
+	(
+		((<EDITOR> | <VOLUME> | <SERIES> | <TYPE> | <CHAPTER> | <ADDRESS> | <EDITION> | <ORGANIZATION> | 
+		<PUBLISHER> | <MONTH> | <CROSSREF> | <NOTE> ) <EQUAL> <STRING>) 
+		|
+		(<PAGES> <EQUAL> <PAGESINPUT> )
+	)
 }
 

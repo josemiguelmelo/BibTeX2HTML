@@ -98,6 +98,10 @@ TOKEN :
 	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <QUOTE>) 
 		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+
 		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <CLOSE_BRACKET>))>
+
+	|
+
+	< PAGESINPUT : <QUOTE><DIGITS>(("-"|",")<DIGITS>)?<QUOTE> >
 }
 
 
@@ -153,6 +157,10 @@ void Expr() : {/*@bgen(jjtree) Expr */
 	BookletExpr()
 	|
 	ConferenceExpr()
+	|
+	InbookExpr()
+	|
+	IncollectionExpr()
 	)*/*@bgen(jjtree)*/
         } catch (Throwable jjte000) {
           if (jjtc000) {
@@ -253,8 +261,10 @@ void ArticleOptional(): {/*@bgen(jjtree) ArticleOptional */
         try {
 /*@egen*/
 	<COMMA> // last fixed
-	(<VOLUME> | <NUMBER> | <PAGES> | <MONTH> | <NOTE> | <KEY>)
-	<EQUAL> <STRING>/*@bgen(jjtree)*/
+	( 
+		((<VOLUME> | <NUMBER> | <MONTH> | <NOTE> | <KEY>) <EQUAL> <STRING>)  |
+		<PAGES> <EQUAL> <PAGESINPUT> 
+	)/*@bgen(jjtree)*/
         } finally {
           if (jjtc000) {
             jjtree.closeNodeScope(jjtn000, true);
@@ -496,20 +506,17 @@ void ConferenceRequirements() : {/*@bgen(jjtree) ConferenceRequirements */
                                  jjtree.openNodeScope(jjtn000);
 /*@egen*/Token author;}
 {/*@bgen(jjtree) ConferenceRequirements */
-         try {
+        try {
 /*@egen*/
-	 <AUTHOR> <EQUAL> 
-	 author = <STRING> 
-	 { System.out.println("Conference id = " + author.image + "\n"); }
-	 <COMMA>
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
 	<TITLE> <EQUAL> <STRING> <COMMA>
 	<BOOKTITLE> <EQUAL> <STRING> <COMMA>
 	<YEAR> <EQUAL> <DIGITS>/*@bgen(jjtree)*/
-         } finally {
-           if (jjtc000) {
-             jjtree.closeNodeScope(jjtn000, true);
-           }
-         }
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
 /*@egen*/
 
 	
@@ -525,8 +532,192 @@ void ConferenceOptional(): {/*@bgen(jjtree) ConferenceOptional */
         try {
 /*@egen*/
 	<COMMA>
-	(<EDITOR> | <VOLUME> | <SERIES> | <PAGES> | <ADDRESS> | <MONTH> | <ORGANIZATION> | <PUBLISHER> | <CROSSREF> | <NOTE> )
+	(
+	( (<EDITOR> | <VOLUME> | <SERIES> | <ADDRESS> | <MONTH> | <ORGANIZATION> | <PUBLISHER> | <CROSSREF> | <NOTE> ) <EQUAL> <STRING> ) |
+		( <PAGES> <EQUAL> <PAGESINPUT>)
+	)/*@bgen(jjtree)*/
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
+/*@egen*/
+}
+
+
+/** INBOOK **/
+
+void InbookExpr() : {/*@bgen(jjtree) InbookExpr */
+                     SimpleNode jjtn000 = new SimpleNode(JJTINBOOKEXPR);
+                     boolean jjtc000 = true;
+                     jjtree.openNodeScope(jjtn000);
+/*@egen*/Token id;}
+{/*@bgen(jjtree) InbookExpr */
+        try {
+/*@egen*/
+	<INBOOK>
+	<OPEN_BRACKET>
+		id = <STRING>
+
+		{ System.out.println("Inbook id = " + id.image + "\n"); }
+
+		<COMMA>
+
+		InbookRequirements()
+		(InbookOptional())*
+		(<COMMA>)?
+
+	<CLOSE_BRACKET>/*@bgen(jjtree)*/
+        } catch (Throwable jjte000) {
+          if (jjtc000) {
+            jjtree.clearNodeScope(jjtn000);
+            jjtc000 = false;
+          } else {
+            jjtree.popNode();
+          }
+          if (jjte000 instanceof RuntimeException) {
+            throw (RuntimeException)jjte000;
+          }
+          if (jjte000 instanceof ParseException) {
+            throw (ParseException)jjte000;
+          }
+          throw (Error)jjte000;
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
+/*@egen*/
+}
+
+
+void InbookRequirements() : {/*@bgen(jjtree) InbookRequirements */
+                             SimpleNode jjtn000 = new SimpleNode(JJTINBOOKREQUIREMENTS);
+                             boolean jjtc000 = true;
+                             jjtree.openNodeScope(jjtn000);
+/*@egen*/Token author;}
+{/*@bgen(jjtree) InbookRequirements */
+        try {
+/*@egen*/
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<CHAPTER> <EQUAL> <STRING> <COMMA>
+	<PUBLISHER> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>/*@bgen(jjtree)*/
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
+/*@egen*/
+}
+
+
+void InbookOptional(): {/*@bgen(jjtree) InbookOptional */
+  SimpleNode jjtn000 = new SimpleNode(JJTINBOOKOPTIONAL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) InbookOptional */
+        try {
+/*@egen*/
+	<COMMA>
+	(<VOLUME> | <SERIES> | <TYPE> | <ADDRESS> | <MONTH> | <EDITION> | <CROSSREF> | <NOTE> )
 	<EQUAL> <STRING>/*@bgen(jjtree)*/
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
+/*@egen*/
+}
+
+
+
+
+/** INCOLLECTION **/
+
+void IncollectionExpr() : {/*@bgen(jjtree) IncollectionExpr */
+                           SimpleNode jjtn000 = new SimpleNode(JJTINCOLLECTIONEXPR);
+                           boolean jjtc000 = true;
+                           jjtree.openNodeScope(jjtn000);
+/*@egen*/Token id;}
+{/*@bgen(jjtree) IncollectionExpr */
+        try {
+/*@egen*/
+	<INCOLLECTION>
+	<OPEN_BRACKET>
+		id = <STRING>
+
+		{ System.out.println("Incollection id = " + id.image + "\n"); }
+
+		<COMMA>
+
+		IncollectionRequirements()
+		(IncollectionOptional())*
+		(<COMMA>)?
+
+	<CLOSE_BRACKET>/*@bgen(jjtree)*/
+        } catch (Throwable jjte000) {
+          if (jjtc000) {
+            jjtree.clearNodeScope(jjtn000);
+            jjtc000 = false;
+          } else {
+            jjtree.popNode();
+          }
+          if (jjte000 instanceof RuntimeException) {
+            throw (RuntimeException)jjte000;
+          }
+          if (jjte000 instanceof ParseException) {
+            throw (ParseException)jjte000;
+          }
+          throw (Error)jjte000;
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
+/*@egen*/
+}
+
+
+void IncollectionRequirements() : {/*@bgen(jjtree) IncollectionRequirements */
+  SimpleNode jjtn000 = new SimpleNode(JJTINCOLLECTIONREQUIREMENTS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) IncollectionRequirements */
+        try {
+/*@egen*/
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<BOOKTITLE> <EQUAL> <STRING> <COMMA>
+	<PUBLISHER> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>/*@bgen(jjtree)*/
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+          }
+        }
+/*@egen*/
+}
+
+
+void IncollectionOptional(): {/*@bgen(jjtree) IncollectionOptional */
+  SimpleNode jjtn000 = new SimpleNode(JJTINCOLLECTIONOPTIONAL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) IncollectionOptional */
+        try {
+/*@egen*/
+	<COMMA>
+	(
+		((<EDITOR> | <VOLUME> | <SERIES> | <TYPE> | <CHAPTER> | <ADDRESS> | <EDITION> | <ORGANIZATION> | 
+		<PUBLISHER> | <MONTH> | <CROSSREF> | <NOTE> ) <EQUAL> <STRING>) 
+		|
+		(<PAGES> <EQUAL> <PAGESINPUT> )
+	)/*@bgen(jjtree)*/
         } finally {
           if (jjtc000) {
             jjtree.closeNodeScope(jjtn000, true);
