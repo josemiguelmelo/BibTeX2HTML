@@ -17,4 +17,4 @@ You should run the BibTex class. To do so, run the following command:
 
 ```
 java BibTex <file_to_parse>
-``
+```
