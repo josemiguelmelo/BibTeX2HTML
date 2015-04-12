@@ -5,13 +5,18 @@ options {
 PARSER_BEGIN(BibTex)
 
 	public class BibTex {
+		private static String fileToParse;
 		public static void main(String args[]) throws ParseException {
 
 			System.out.println("Working Directory = " +
               System.getProperty("user.dir"));
 
+			System.out.println("File = " + args[0]);
+
+			fileToParse = args[0];
+
 			try{
-				BibTex parser = new BibTex(new java.io.FileInputStream("C:\\Users\\Tiago\\Desktop\\COMP\\BibTeX2HTML\\lol.bib"));
+				BibTex parser = new BibTex(new java.io.FileInputStream(fileToParse));
 				SimpleNode root = parser.Start();
 
 				root.dump("");
@@ -100,12 +105,18 @@ SimpleNode Start() : {}
 void Expr() : {}
 {
 
-	ArticleExpr() 
+	(ArticleExpr() 
 	| 
 	BookExpr()
+	|
+	BookletExpr()
+	|
+	ConferenceExpr()
+	)*
 	
 }
 
+/** Article **/
 void ArticleExpr() : {Token id;}
 {
 	<ARTICLE>
@@ -126,14 +137,6 @@ void ArticleExpr() : {Token id;}
 	 	<CLOSE_BRACKET>
 }
 
-void BookExpr() : {}
-{
-	<BOOK>
-		<OPEN_BRACKET>
-
-	 	<CLOSE_BRACKET>
-}
-
 void ArticleRequirements(): {}
 {
 	<AUTHOR> <EQUAL> <STRING> <COMMA>
@@ -148,3 +151,123 @@ void ArticleOptional(): {}
 	(<VOLUME> | <NUMBER> | <PAGES> | <MONTH> | <NOTE> | <KEY>)
 	<EQUAL> <STRING>
 }
+
+
+
+/** BOOK **/
+
+void BookExpr() : {Token id;}
+{
+	<BOOK>
+		<OPEN_BRACKET>
+			id = <STRING>
+
+			{ System.out.println("Book id = " + id.image + "\n"); }
+
+			<COMMA>
+
+			BookRequirements()
+			(BookOptional())*
+			(<COMMA>)?
+
+
+	 	<CLOSE_BRACKET>
+}
+
+
+
+void BookRequirements(): {}
+{
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<PUBLISHER> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>
+}
+
+void BookOptional(): {}
+{
+	<COMMA>
+	(<VOLUME> | <SERIES> | <ADDRESS> | <EDITION> | <MONTH> | <CROSSREF> | <NOTE> )
+	<EQUAL> <STRING>
+}
+
+
+
+
+
+
+/** BOOKLET **/
+void BookletExpr() : {Token id; }
+{
+	<BOOKLET>
+		<OPEN_BRACKET>
+			id = <STRING>
+
+			{ System.out.println("Booklet id = " + id.image + "\n"); }
+
+			<COMMA>
+
+			BookletRequirements()
+
+			(BookletOptional())*
+
+			(<COMMA>)?
+
+
+	 	<CLOSE_BRACKET>
+
+}
+
+void BookletRequirements(): {}
+{
+	<TITLE> <EQUAL> <STRING>
+}
+
+
+
+void BookletOptional(): {}
+{
+	<COMMA>
+	(((<AUTHOR> | <HOWPUBLISHED> | <ADDRESS> | <MONTH> | <CROSSREF> | <NOTE>)
+	<EQUAL> <STRING>) | <YEAR> <EQUAL> <DIGITS> )
+}
+
+
+/** CONFERENCE **/
+
+void ConferenceExpr() : {Token id;}
+{
+	<CONFERENCE>
+	<OPEN_BRACKET>
+		id = <STRING>
+
+		{ System.out.println("Conference id = " + id.image + "\n"); }
+
+		<COMMA>
+
+		ConferenceRequirements()
+		(ConferenceOptional())*
+		(<COMMA>)?
+
+	<CLOSE_BRACKET>
+}
+
+
+void ConferenceRequirements() : {Token author;}
+{
+	<AUTHOR> <EQUAL> <STRING> <COMMA>
+	<TITLE> <EQUAL> <STRING> <COMMA>
+	<BOOKTITLE> <EQUAL> <STRING> <COMMA>
+	<YEAR> <EQUAL> <DIGITS>
+
+	
+}
+
+
+void ConferenceOptional(): {}
+{
+	<COMMA>
+	(<EDITOR> | <VOLUME> | <SERIES> | <PAGES> | <ADDRESS> | <MONTH> | <ORGANIZATION> | <PUBLISHER> | <CROSSREF> | <NOTE> )
+	<EQUAL> <STRING>
+}
+
