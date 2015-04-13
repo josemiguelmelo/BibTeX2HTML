@@ -132,7 +132,7 @@ void ArticleExpr() : {Token id;}
 		
 		id = <STRING>
 
-		{System.out.println("Article id = " + id.image + "\n");}
+		{System.out.println(id.image + " parsed successfully.\n");}
 
 		<COMMA>
 
@@ -172,7 +172,7 @@ void BookExpr() : {Token id;}
 		<OPEN_BRACKET>
 			id = <STRING>
 
-			{ System.out.println("Book id = " + id.image + "\n"); }
+			{System.out.println(id.image + " parsed successfully.\n");}
 
 			<COMMA>
 
@@ -213,7 +213,7 @@ void BookletExpr() : {Token id; }
 		<OPEN_BRACKET>
 			id = <STRING>
 
-			{ System.out.println("Booklet id = " + id.image + "\n"); }
+			{System.out.println(id.image + " parsed successfully.\n");}
 
 			<COMMA>
 
@@ -251,7 +251,7 @@ void ConferenceExpr() : {Token id;}
 	<OPEN_BRACKET>
 		id = <STRING>
 
-		{ System.out.println("Conference id = " + id.image + "\n"); }
+		{System.out.println(id.image + " parsed successfully.\n");}
 
 		<COMMA>
 
@@ -292,7 +292,7 @@ void InbookExpr() : {Token id;}
 	<OPEN_BRACKET>
 		id = <STRING>
 
-		{ System.out.println("Inbook id = " + id.image + "\n"); }
+		{System.out.println(id.image + " parsed successfully.\n");}
 
 		<COMMA>
 
@@ -332,7 +332,7 @@ void IncollectionExpr() : {Token id;}
 	<OPEN_BRACKET>
 		id = <STRING>
 
-		{ System.out.println("Incollection id = " + id.image + "\n"); }
+		{System.out.println(id.image + " parsed successfully.\n");}
 
 		<COMMA>
 
