@@ -91,13 +91,14 @@ TOKEN :
 
 TOKEN :
 {
+	< PAGESINPUT : <QUOTE><DIGITS>(("-"|",")<DIGITS>)?<QUOTE> >
+}
+
+TOKEN :
+{
 	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <QUOTE>) 
 		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+
 		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <CLOSE_BRACKET>))>
-
-	|
-
-	< PAGESINPUT : <QUOTE><DIGITS>(("-"|",")<DIGITS>)?<QUOTE> >
 }
 
 
