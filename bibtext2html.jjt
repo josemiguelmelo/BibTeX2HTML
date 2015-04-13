@@ -44,7 +44,6 @@ TOKEN :
 	< CONCAT : "#" > |
 	< QUOTE : "\"" > |
 	< COMMA : "," > |
-
 	< ARTICLE : "@article" > | 
 	< BOOK : "@book" > |
 	< BOOKLET : "@booklet" > |
@@ -53,14 +52,14 @@ TOKEN :
 	< INCOLLECTION : "@incollection" > |
 	< INPROCEEDINGS : "@inproceedings" > |
 	< MANUAL : "@manual" > |
+
+
 	< MASTERTHESIS : "@masterthesis" > |
 	< MISC : "@misc" > |
 	< PHDTHESIS : "@phdthesis" > |
 	< PROCEEDINGS : "@proceedings" > |
 	< TECHREPORT : "@techreport" > |
 	< UNPUBLISHED : "@unpublished" > |
-
-
 	< AUTHOR : "author" > |
 	< TITLE : "title" > |
 	< YEAR : "year" > |
@@ -71,6 +70,8 @@ TOKEN :
 	< KEY : "key" > |
 	< EDITOR : "editor" > |
 	< PUBLISHER : "publisher" > |
+
+
 	< ADDRESS : "address" > |
 	< SERIES : "series" > |
 	< EDITION : "edition" > |
@@ -110,6 +111,7 @@ SimpleNode Start() : {}
 void Expr() : {}
 {
 
+try{
 	(ArticleExpr() 
 	| 
 	BookExpr()
@@ -122,18 +124,23 @@ void Expr() : {}
 	|
 	IncollectionExpr()
 	)*
+}catch(Exception e){
+	System.out.println("Invalid format found.");
+}
 	
 }
 
 /** Article **/
 void ArticleExpr() : {Token id;}
 {
+
+
 	<ARTICLE>
 		<OPEN_BRACKET>
 		
 		id = <STRING>
 
-		{System.out.println(id.image + " parsed successfully.\n");}
+		{System.out.println(id.image + " being parsed....\n");}
 
 		<COMMA>
 
@@ -144,6 +151,7 @@ void ArticleExpr() : {Token id;}
 
 
 	 	<CLOSE_BRACKET>
+		{System.out.println(id.image + " parsed successfully.\n");}
 }
 
 void ArticleRequirements(): {}
@@ -172,8 +180,8 @@ void BookExpr() : {Token id;}
 	<BOOK>
 		<OPEN_BRACKET>
 			id = <STRING>
+		{System.out.println(id.image + " being parsed....\n");}
 
-			{System.out.println(id.image + " parsed successfully.\n");}
 
 			<COMMA>
 
@@ -183,6 +191,7 @@ void BookExpr() : {Token id;}
 
 
 	 	<CLOSE_BRACKET>
+			{System.out.println(id.image + " parsed successfully.\n");}
 }
 
 
@@ -213,8 +222,9 @@ void BookletExpr() : {Token id; }
 	<BOOKLET>
 		<OPEN_BRACKET>
 			id = <STRING>
+		{System.out.println(id.image + " being parsed....\n");}
 
-			{System.out.println(id.image + " parsed successfully.\n");}
+			
 
 			<COMMA>
 
@@ -226,6 +236,8 @@ void BookletExpr() : {Token id; }
 
 
 	 	<CLOSE_BRACKET>
+
+	 	{System.out.println(id.image + " parsed successfully.\n");}
 
 }
 
@@ -251,8 +263,8 @@ void ConferenceExpr() : {Token id;}
 	<CONFERENCE>
 	<OPEN_BRACKET>
 		id = <STRING>
+		{System.out.println(id.image + " being parsed....\n");}
 
-		{System.out.println(id.image + " parsed successfully.\n");}
 
 		<COMMA>
 
@@ -261,6 +273,8 @@ void ConferenceExpr() : {Token id;}
 		(<COMMA>)?
 
 	<CLOSE_BRACKET>
+
+	{System.out.println(id.image + " parsed successfully.\n");}
 }
 
 
@@ -292,8 +306,8 @@ void InbookExpr() : {Token id;}
 	<INBOOK>
 	<OPEN_BRACKET>
 		id = <STRING>
+		{System.out.println(id.image + " being parsed....\n");}
 
-		{System.out.println(id.image + " parsed successfully.\n");}
 
 		<COMMA>
 
@@ -302,6 +316,9 @@ void InbookExpr() : {Token id;}
 		(<COMMA>)?
 
 	<CLOSE_BRACKET>
+
+
+		{System.out.println(id.image + " parsed successfully.\n");}
 }
 
 
@@ -332,8 +349,7 @@ void IncollectionExpr() : {Token id;}
 	<INCOLLECTION>
 	<OPEN_BRACKET>
 		id = <STRING>
-
-		{System.out.println(id.image + " parsed successfully.\n");}
+		{System.out.println(id.image + " being parsed....\n");}
 
 		<COMMA>
 
@@ -342,6 +358,10 @@ void IncollectionExpr() : {Token id;}
 		(<COMMA>)?
 
 	<CLOSE_BRACKET>
+
+
+
+		{System.out.println(id.image + " parsed successfully.\n");}
 }
 
 
