@@ -8,10 +8,9 @@ PARSER_BEGIN(BibTex)
 		private static String fileToParse;
 		public static void main(String args[]) throws ParseException {
 
-			System.out.println("Working Directory = " +
-              System.getProperty("user.dir"));
-
-			System.out.println("File = " + args[0]);
+			System.out.println("====================================\n");
+			System.out.println(args[0] + " is being parsed.\n");
+			System.out.println("====================================\n");
 
 			fileToParse = args[0];
 
@@ -125,7 +124,7 @@ try{
 	IncollectionExpr()
 	)*
 }catch(Exception e){
-	System.out.println("Invalid format found.");
+	System.out.println("Invalid format found.\n");
 }
 	
 }
