@@ -3,9 +3,9 @@
 This project needs JavaCC to be compiled. After installing JavaCC, use the following commands within the source directory:
 
 ```
-./jjtree bibtext2html.jjt
+jjtree bibtext2html.jjt
 
-./javacc bibtext2html.jj
+javacc bibtext2html.jj
 
 javac *.java
 ```
