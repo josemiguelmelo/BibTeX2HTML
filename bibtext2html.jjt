@@ -129,6 +129,132 @@ try{
 	
 }
 
+void Author(): {} 
+{
+	<AUTHOR> <EQUAL> <STRING>
+}
+
+void Title():{}
+{
+	<TITLE> <EQUAL> <STRING>
+}
+
+void Year():{}
+{
+	<YEAR> <EQUAL> <DIGITS> 
+}
+
+
+void Pages():{}
+{
+	<PAGES> <EQUAL> <PAGESINPUT> 
+}
+	
+
+void Month():{}
+{
+	<MONTH> <EQUAL> <STRING>
+}
+	
+
+void Note():{}
+{
+	<NOTE> <EQUAL> <STRING>
+}
+	
+
+void Key():{}
+{
+	<KEY> <EQUAL> <STRING>
+}
+	
+	
+void Editor():{}
+{
+	<EDITOR> <EQUAL> <STRING>
+}
+	
+void Publisher(): {}
+{
+	<PUBLISHER> <EQUAL> <STRING>
+}
+
+void Number():{}
+{
+	<NUMBER> <EQUAL> <DIGITS> 
+}
+
+
+void Address():{}
+{
+	<ADDRESS> <EQUAL> <STRING>
+}
+
+void Series():{}
+{
+	<SERIES> <EQUAL> <STRING>
+}
+
+void Edition():{}
+{
+	<SERIES> <EQUAL> <STRING>
+}
+
+void HowPublished():{}
+{
+	<HOWPUBLISHED> <EQUAL> <STRING>
+}
+
+void Chapter():{}
+{
+	<CHAPTER> <EQUAL> <STRING>
+}
+
+void Type():{}
+{
+	<TYPE> <EQUAL> <STRING>
+}
+
+
+void Annote():{}
+{
+        <ANNOTE> <EQUAL> <STRING>
+}
+
+void BookTitle():{}
+{
+        <BOOKTITLE> <EQUAL> <STRING>
+}
+
+void CrossRef():{}
+{
+        <CROSSREF> <EQUAL> <STRING>
+}
+
+void Institution():{}
+{
+        <INSTITUTION> <EQUAL> <STRING>
+}
+
+void Journal():{}
+{
+        <JOURNAL> <EQUAL> <STRING>
+}
+void Organization():{}
+{
+        <ORGANIZATION> <EQUAL> <STRING>
+}
+
+void School():{}
+{
+        <SCHOOL> <EQUAL> <STRING>
+}
+
+void Volume():{}
+{
+        <VOLUME> <EQUAL> <STRING>
+}
+
 /** Article **/
 void ArticleExpr() : {Token id;}
 {
@@ -155,10 +281,10 @@ void ArticleExpr() : {Token id;}
 
 void ArticleRequirements(): {}
 {
-	<AUTHOR> <EQUAL> <STRING> <COMMA>
-	<TITLE> <EQUAL> <STRING> <COMMA>
-	<JOURNAL> <EQUAL> <STRING> <COMMA>
-	<YEAR> <EQUAL> <DIGITS>
+	Author() <COMMA>
+	Title() <COMMA>
+	Journal() <COMMA>
+	Year()
 }
 
 void ArticleOptional(): {}
