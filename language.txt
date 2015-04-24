@@ -1,5 +1,6 @@
+=====================================
 Tokens de aceitação da linguagem
-
+=====================================
 Tokens: 
 
 { -> abrir chaveta
@@ -17,7 +18,19 @@ string,inteiro,data
 author,note,key,date,month,year,title,address,howpublished,series,number,volume,author,editor,publisher,journal,...
 
 
-Exemplo
+------ Exemplo ---------
 @article {
-	
+	author = "nome do autor",
 }
+
+
+
+=====================================
+				Sintax
+=====================================
+
+S -> Class "{" Id Body "}"
+Class -> "@article" | "@book" | ...
+Id -> STRING
+Body -> { "," Params? }
+Params -> "author" "=" STRING | "title" "=" STRING | ....
