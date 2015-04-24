@@ -1,6 +1,6 @@
-options {
+/*options {
 	LOOKAHEAD=2;
-}
+}*/
 
 PARSER_BEGIN(BibTex)
 
@@ -111,23 +111,18 @@ void Expr() : {}
 {
 
 try{
-	(ArticleExpr() 
-	| 
-	BookExpr()
-	|
-	BookletExpr()
-	|
-	ConferenceExpr()
-	|
-	InbookExpr()
-	|
-	IncollectionExpr()
-	)*
+	(Language())*
 }catch(Exception e){
 	System.out.println("Invalid format found.\n");
 }
 	
 }
+
+
+/** 
+ *****    ****** BibTex Params  **** ******
+**/
+
 
 void Author(): {} 
 {
@@ -197,7 +192,7 @@ void Series():{}
 
 void Edition():{}
 {
-	<SERIES> <EQUAL> <STRING>
+	<EDITION> <EQUAL> <STRING>
 }
 
 void HowPublished():{}
@@ -255,259 +250,121 @@ void Volume():{}
         <VOLUME> <EQUAL> <STRING>
 }
 
-/** Article **/
-void ArticleExpr() : {Token id;}
+
+/** 
+ *****    ****** BibTex Classes  **** ******
+**/
+	
+void Article() :{}
 {
-
-
 	<ARTICLE>
-		<OPEN_BRACKET>
-		
-		id = <STRING>
-
-		{System.out.println(id.image + " being parsed....\n");}
-
-		<COMMA>
-
-		ArticleRequirements()
-
-		(ArticleOptional())*
-		(<COMMA>)?
-
-
-	 	<CLOSE_BRACKET>
-		{System.out.println(id.image + " parsed successfully.\n");}
 }
 
-void ArticleRequirements(): {}
-{
-	Author() <COMMA>
-	Title() <COMMA>
-	Journal() <COMMA>
-	Year()
-}
-
-void ArticleOptional(): {}
-{
-	<COMMA> // last fixed
-	( 
-		((<VOLUME> | <NUMBER> | <MONTH> | <NOTE> | <KEY>) <EQUAL> <STRING>)  |
-		<PAGES> <EQUAL> <PAGESINPUT> 
-	)
-}
-
-
-
-/** BOOK **/
-
-void BookExpr() : {Token id;}
+void Book() :{}
 {
 	<BOOK>
-		<OPEN_BRACKET>
-			id = <STRING>
-		{System.out.println(id.image + " being parsed....\n");}
-
-
-			<COMMA>
-
-			BookRequirements()
-			(BookOptional())*
-			(<COMMA>)?
-
-
-	 	<CLOSE_BRACKET>
-			{System.out.println(id.image + " parsed successfully.\n");}
 }
 
-
-
-void BookRequirements(): {}
-{
-	<AUTHOR> <EQUAL> <STRING> <COMMA>
-	<TITLE> <EQUAL> <STRING> <COMMA>
-	<PUBLISHER> <EQUAL> <STRING> <COMMA>
-	<YEAR> <EQUAL> <DIGITS>
-}
-
-void BookOptional(): {}
-{
-	<COMMA>
-	(<VOLUME> | <SERIES> | <ADDRESS> | <EDITION> | <MONTH> | <CROSSREF> | <NOTE> )
-	<EQUAL> <STRING>
-}
-
-
-
-
-
-
-/** BOOKLET **/
-void BookletExpr() : {Token id; }
+void Booklet() :{}
 {
 	<BOOKLET>
-		<OPEN_BRACKET>
-			id = <STRING>
-		{System.out.println(id.image + " being parsed....\n");}
-
-			
-
-			<COMMA>
-
-			BookletRequirements()
-
-			(BookletOptional())*
-
-			(<COMMA>)?
-
-
-	 	<CLOSE_BRACKET>
-
-	 	{System.out.println(id.image + " parsed successfully.\n");}
-
 }
 
-void BookletRequirements(): {}
-{
-	<TITLE> <EQUAL> <STRING>
-}
-
-
-
-void BookletOptional(): {}
-{
-	<COMMA>
-	(((<AUTHOR> | <HOWPUBLISHED> | <ADDRESS> | <MONTH> | <CROSSREF> | <NOTE>)
-	<EQUAL> <STRING>) | <YEAR> <EQUAL> <DIGITS> )
-}
-
-
-/** CONFERENCE **/
-
-void ConferenceExpr() : {Token id;}
+void Conference() :{}
 {
 	<CONFERENCE>
+}
+void Inbook() :{}
+{
+	<INBOOK>
+}
+
+void Incollection() :{}
+{
+	<INCOLLECTION>
+}
+void Inproceedings() :{}
+{
+	<INPROCEEDINGS>
+}
+
+void Manual() :{}
+{
+	<MANUAL>
+}
+
+
+void Masterthesis() :{}
+{
+	<MASTERTHESIS>
+}
+
+void Misc() :{}
+{
+	<MISC>
+}
+
+void PhdThesis() :{}
+{
+	<PHDTHESIS>
+}
+void Proceedings() :{}
+{
+	<PROCEEDINGS>
+}
+void TechReport() :{}
+{
+	<TECHREPORT>
+}
+void Unpublished() :{}
+{
+	<UNPUBLISHED>
+}
+
+
+/** 
+ *** **** ** ** Language Class **** * ***** ** **
+ **/
+void Class() : {}
+{
+	Article() | Book() | Booklet() | Conference() | Inbook() | Incollection() | Inproceedings() | Manual() | Masterthesis() |
+	Misc() | PhdThesis() | Proceedings() | TechReport() | Unpublished()
+}
+
+/** 
+ *** **** ** ** Language Body **** * ***** ** **
+ **/
+void Body():{}
+{
+	(<COMMA>
+	(Params())?
+	)*
+}
+
+/** 
+ *** **** ** ** Language Params **** * ***** ** **
+ **/
+void Params(): {}
+{
+	(Author() | Title() | Year() | Number() | Pages() | Month() | Note() | Key() | Editor() | Publisher() | Address() | Series() |
+	Edition() | HowPublished() | Chapter() | Type() | Annote() | BookTitle() | CrossRef() | Institution() | Journal() | Organization() |
+	School() | Volume())
+}
+
+void Language() : {Token mainClass, id;}
+{
+	Class()
 	<OPEN_BRACKET>
-		id = <STRING>
-		{System.out.println(id.image + " being parsed....\n");}
 
+	id = <STRING>
 
-		<COMMA>
+	{System.out.println(id.image + " being parsed...\n");}
 
-		ConferenceRequirements()
-		(ConferenceOptional())*
-		(<COMMA>)?
+	Body()
 
+	{System.out.println("Body has been parsed.\n");}
 	<CLOSE_BRACKET>
 
 	{System.out.println(id.image + " parsed successfully.\n");}
-}
-
-
-void ConferenceRequirements() : {Token author;}
-{
-	<AUTHOR> <EQUAL> <STRING> <COMMA>
-	<TITLE> <EQUAL> <STRING> <COMMA>
-	<BOOKTITLE> <EQUAL> <STRING> <COMMA>
-	<YEAR> <EQUAL> <DIGITS>
-
-	
-}
-
-
-void ConferenceOptional(): {}
-{
-	<COMMA>
-	(
-	( (<EDITOR> | <VOLUME> | <SERIES> | <ADDRESS> | <MONTH> | <ORGANIZATION> | <PUBLISHER> | <CROSSREF> | <NOTE> ) <EQUAL> <STRING> ) |
-		( <PAGES> <EQUAL> <PAGESINPUT>)
-	)
-}
-
-
-/** INBOOK **/
-
-void InbookExpr() : {Token id;}
-{
-	<INBOOK>
-	<OPEN_BRACKET>
-		id = <STRING>
-		{System.out.println(id.image + " being parsed....\n");}
-
-
-		<COMMA>
-
-		InbookRequirements()
-		(InbookOptional())*
-		(<COMMA>)?
-
-	<CLOSE_BRACKET>
-
-
-		{System.out.println(id.image + " parsed successfully.\n");}
-}
-
-
-void InbookRequirements() : {Token author;}
-{
-	<AUTHOR> <EQUAL> <STRING> <COMMA>
-	<TITLE> <EQUAL> <STRING> <COMMA>
-	<CHAPTER> <EQUAL> <STRING> <COMMA>
-	<PUBLISHER> <EQUAL> <STRING> <COMMA>
-	<YEAR> <EQUAL> <DIGITS>
-}
-
-
-void InbookOptional(): {}
-{
-	<COMMA>
-	(<VOLUME> | <SERIES> | <TYPE> | <ADDRESS> | <MONTH> | <EDITION> | <CROSSREF> | <NOTE> )
-	<EQUAL> <STRING>
-}
-
-
-
-
-/** INCOLLECTION **/
-
-void IncollectionExpr() : {Token id;}
-{
-	<INCOLLECTION>
-	<OPEN_BRACKET>
-		id = <STRING>
-		{System.out.println(id.image + " being parsed....\n");}
-
-		<COMMA>
-
-		IncollectionRequirements()
-		(IncollectionOptional())*
-		(<COMMA>)?
-
-	<CLOSE_BRACKET>
-
-
-
-		{System.out.println(id.image + " parsed successfully.\n");}
-}
-
-
-void IncollectionRequirements() : {}
-{
-	<AUTHOR> <EQUAL> <STRING> <COMMA>
-	<TITLE> <EQUAL> <STRING> <COMMA>
-	<BOOKTITLE> <EQUAL> <STRING> <COMMA>
-	<PUBLISHER> <EQUAL> <STRING> <COMMA>
-	<YEAR> <EQUAL> <DIGITS>
-}
-
-
-void IncollectionOptional(): {}
-{
-	<COMMA>
-	(
-		((<EDITOR> | <VOLUME> | <SERIES> | <TYPE> | <CHAPTER> | <ADDRESS> | <EDITION> | <ORGANIZATION> | 
-		<PUBLISHER> | <MONTH> | <CROSSREF> | <NOTE> ) <EQUAL> <STRING>) 
-		|
-		(<PAGES> <EQUAL> <PAGESINPUT> )
-	)
 }
 
