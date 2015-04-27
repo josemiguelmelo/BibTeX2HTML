@@ -7,5 +7,7 @@ jjtree
 jjtree.bat
 /lib
 *.java
+!SimpleNode.java
+!Semantic.java
 *.class
 bibtext2html.jj
