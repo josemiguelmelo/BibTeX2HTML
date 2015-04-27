@@ -4,9 +4,19 @@
 
 PARSER_BEGIN(BibTex)
 
+	import java.util.*;
+
 	public class BibTex {
 		private static String fileToParse;
+
+
+		public String paramName;
+
+		private static Semantic semantic;
+
 		public static void main(String args[]) throws ParseException {
+
+			semantic = new Semantic();
 
 			System.out.println("====================================\n");
 			System.out.println(args[0] + " is being parsed.\n");
@@ -19,12 +29,68 @@ PARSER_BEGIN(BibTex)
 				SimpleNode root = parser.Start();
 
 				root.dump("");
+
+				parser.eval(root);
 			}
 			
 	        catch(java.io.FileNotFoundException e) {
 	          System.out.println ("The file was not found.");
 	          return;
 	        }
+		}
+
+		public ArrayList<String> getBodyParams(SimpleNode bodyNode){
+			ArrayList<String> params = new ArrayList<String>();
+			for(int i = 0; i < bodyNode.jjtGetNumChildren() ; i++){
+				SimpleNode param = (SimpleNode) bodyNode.jjtGetChild(i);
+
+				if(param.jjtGetNumChildren()!=0){
+					SimpleNode paramChildNode = (SimpleNode) param.jjtGetChild(0);
+					String paramName = paramChildNode.paramName;
+
+					params.add(paramName);
+				}
+			}
+
+			return params;
+		}
+
+
+		public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode)
+		{
+			SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
+			String className = classChildNode.className;
+
+			ArrayList<String> bodyParams = getBodyParams(bodyNode);
+
+			if(semantic.evalParams(bodyParams, className) == false){
+				System.exit(1);
+			}
+			return 0;
+		}
+
+		public int eval(SimpleNode node)
+		{
+			if(node.jjtGetNumChildren() == 0)
+				return 0;
+			else if(node.jjtGetNumChildren() == 1){
+				SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
+				return this.eval(childNode);
+			}
+			else if(node.jjtGetNumChildren() == 2){
+				SimpleNode classChild = (SimpleNode) node.jjtGetChild(0); // class
+				SimpleNode bodyChild = (SimpleNode) node.jjtGetChild(1); // body
+
+				return this.evalLanguage(classChild, bodyChild);
+			}
+
+
+			for(int i = 0 ; i < node.jjtGetNumChildren() ; i++)
+			{
+				this.eval((SimpleNode) node.jjtGetChild(i));
+			}
+
+			return 0;
 		}
 	}
 
@@ -127,127 +193,153 @@ try{
 void Author(): {} 
 {
 	<AUTHOR> <EQUAL> <STRING>
+
+	{jjtThis.paramName = "author";}
 }
 
 void Title():{}
 {
 	<TITLE> <EQUAL> <STRING>
+	{jjtThis.paramName = "title";}
 }
 
 void Year():{}
 {
 	<YEAR> <EQUAL> <DIGITS> 
+	{jjtThis.paramName = "year";}
 }
 
 
 void Pages():{}
 {
 	<PAGES> <EQUAL> <PAGESINPUT> 
+
+	{jjtThis.paramName = "pages";}
 }
 	
 
 void Month():{}
 {
 	<MONTH> <EQUAL> <STRING>
+	{jjtThis.paramName = "month";}
 }
 	
 
 void Note():{}
 {
 	<NOTE> <EQUAL> <STRING>
+	{jjtThis.paramName = "note";}
 }
 	
 
 void Key():{}
 {
 	<KEY> <EQUAL> <STRING>
+	{jjtThis.paramName = "key";}
 }
 	
 	
 void Editor():{}
 {
 	<EDITOR> <EQUAL> <STRING>
+	{jjtThis.paramName = "editor";}
 }
 	
 void Publisher(): {}
 {
 	<PUBLISHER> <EQUAL> <STRING>
+	{jjtThis.paramName = "publisher";}
 }
 
 void Number():{}
 {
 	<NUMBER> <EQUAL> <DIGITS> 
+	{jjtThis.paramName = "number";}
 }
 
 
 void Address():{}
 {
 	<ADDRESS> <EQUAL> <STRING>
+	{jjtThis.paramName = "address";}
 }
 
 void Series():{}
 {
 	<SERIES> <EQUAL> <STRING>
+	{jjtThis.paramName = "series";}
 }
 
 void Edition():{}
 {
 	<EDITION> <EQUAL> <STRING>
+	{jjtThis.paramName = "edition";}
 }
 
 void HowPublished():{}
 {
 	<HOWPUBLISHED> <EQUAL> <STRING>
+	{jjtThis.paramName = "howpublished";}
 }
 
 void Chapter():{}
 {
 	<CHAPTER> <EQUAL> <STRING>
+	{jjtThis.paramName = "chapter";}
 }
 
 void Type():{}
 {
 	<TYPE> <EQUAL> <STRING>
+	{jjtThis.paramName = "type";}
 }
 
 
 void Annote():{}
 {
-        <ANNOTE> <EQUAL> <STRING>
+    <ANNOTE> <EQUAL> <STRING>
+	{jjtThis.paramName = "annote";}
 }
 
 void BookTitle():{}
 {
-        <BOOKTITLE> <EQUAL> <STRING>
+    <BOOKTITLE> <EQUAL> <STRING>
+	{jjtThis.paramName = "booktitle";}
 }
 
 void CrossRef():{}
 {
-        <CROSSREF> <EQUAL> <STRING>
+    <CROSSREF> <EQUAL> <STRING>
+	{jjtThis.paramName = "crossref";}
 }
 
 void Institution():{}
 {
-        <INSTITUTION> <EQUAL> <STRING>
+    <INSTITUTION> <EQUAL> <STRING>
+	{jjtThis.paramName = "institution";}
 }
 
 void Journal():{}
 {
-        <JOURNAL> <EQUAL> <STRING>
+    <JOURNAL> <EQUAL> <STRING>
+	{jjtThis.paramName = "journal";}
 }
 void Organization():{}
 {
-        <ORGANIZATION> <EQUAL> <STRING>
+    <ORGANIZATION> <EQUAL> <STRING>
+	{jjtThis.paramName = "organization";}
 }
 
 void School():{}
 {
-        <SCHOOL> <EQUAL> <STRING>
+    <SCHOOL> <EQUAL> <STRING>
+	{jjtThis.paramName = "school";}
 }
 
 void Volume():{}
 {
-        <VOLUME> <EQUAL> <STRING>
+    <VOLUME> <EQUAL> <STRING>
+	{jjtThis.paramName = "volume";}
 }
 
 
@@ -258,67 +350,81 @@ void Volume():{}
 void Article() :{}
 {
 	<ARTICLE>
+	{jjtThis.className = "article";}
 }
 
 void Book() :{}
 {
 	<BOOK>
+	{jjtThis.className = "book";}
 }
 
 void Booklet() :{}
 {
 	<BOOKLET>
+	{jjtThis.className = "booklet";}
 }
 
 void Conference() :{}
 {
 	<CONFERENCE>
+	{jjtThis.className = "conference";}
 }
 void Inbook() :{}
 {
 	<INBOOK>
+	{jjtThis.className = "inbook";}
 }
 
 void Incollection() :{}
 {
 	<INCOLLECTION>
+	{jjtThis.className = "incollection";}
 }
 void Inproceedings() :{}
 {
 	<INPROCEEDINGS>
+	{jjtThis.className = "inproceedings";}
 }
 
 void Manual() :{}
 {
 	<MANUAL>
+	{jjtThis.className = "manual";}
 }
 
 
 void Masterthesis() :{}
 {
 	<MASTERTHESIS>
+	{jjtThis.className = "masterthesis";}
 }
 
 void Misc() :{}
 {
 	<MISC>
+	{jjtThis.className = "misc";}
 }
 
 void PhdThesis() :{}
 {
 	<PHDTHESIS>
+	{jjtThis.className = "phdthesis";}
 }
 void Proceedings() :{}
 {
 	<PROCEEDINGS>
+	{jjtThis.className = "proceedings";}
 }
 void TechReport() :{}
 {
 	<TECHREPORT>
+	{jjtThis.className = "techreport";}
 }
 void Unpublished() :{}
 {
 	<UNPUBLISHED>
+	{jjtThis.className = "unpublished";}
 }
 
 
@@ -353,18 +459,15 @@ void Params(): {}
 
 void Language() : {Token mainClass, id;}
 {
+	{ jjtThis.paramName = "language"; }
 	Class()
 	<OPEN_BRACKET>
 
 	id = <STRING>
 
-	{System.out.println(id.image + " being parsed...\n");}
-
 	Body()
 
-	{System.out.println("Body has been parsed.\n");}
 	<CLOSE_BRACKET>
 
-	{System.out.println(id.image + " parsed successfully.\n");}
 }
 
