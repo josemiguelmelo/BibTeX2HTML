@@ -77,7 +77,9 @@ PARSER_BEGIN(BibTex)
 				SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
 				return this.eval(childNode);
 			}
-			else if(node.jjtGetNumChildren() == 2){
+			else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
+				((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
+				
 				SimpleNode classChild = (SimpleNode) node.jjtGetChild(0); // class
 				SimpleNode bodyChild = (SimpleNode) node.jjtGetChild(1); // body
 
