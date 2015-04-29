@@ -21,23 +21,6 @@ public class Semantic{
 
 	}
 
-	private HashMap<String, Boolean> getArticleElement(){
-		HashMap<String, Boolean> articleElement = new HashMap<String, Boolean>();
-
-		articleElement.put("author", true);
-		articleElement.put("title", true);
-		articleElement.put("journal", true);
-		articleElement.put("year", true);
-		articleElement.put("volume", true);
-		articleElement.put("number", false);
-		articleElement.put("pages", false);
-		articleElement.put("month", false);
-		articleElement.put("note", false);
-		articleElement.put("key", false);
-
-		return articleElement;
-	}
-
 	public void init(){
 
 		try {
@@ -50,7 +33,7 @@ public class Semantic{
         }
 	}
 
-	public boolean evalParams(ArrayList<String> paramsList, String className){
+	public boolean evalParams(HashMap<String, String> paramsList, String className){
 
 		HashMap<String, Boolean> possibleParams = this.entriesSemantic.get(className);
 
@@ -64,17 +47,37 @@ public class Semantic{
 	        	String[] paramNames = ((String)pair.getKey()).split("/");
 
 	        	if(paramNames.length == 2){
-	        		if(!paramsList.contains(paramNames[0]) && !paramsList.contains(paramNames[1])){
+	        		if(!paramsList.containsKey(paramNames[0]) && !paramsList.containsKey(paramNames[1])){
 		        		System.out.println("Required param not found ("+pair.getKey()+").");
 		        		return false;
 		        	}
 	        	}else{
-		        	if(!paramsList.contains(pair.getKey())){
+		        	if(!paramsList.containsKey(pair.getKey())){
 		        		System.out.println("Required param not found ("+pair.getKey()+").");
 		        		return false;
 		        	}
 	        	}
 	        }
+
+	        if(paramsList.containsKey(pair.getKey()) && pair.getKey().equals("pages")){
+	        	String pagesString = paramsList.get("pages");
+	        	pagesString = pagesString.replace("\"", "");
+
+			    String[] pages = pagesString.split("-");
+			   
+			    if(pages.length==2){
+			        int firstPage = Integer.parseInt(pages[0]);
+			        int lastPage = Integer.parseInt(pages[1]);
+			        if(lastPage < firstPage){
+			        	System.out.println("Error: Last page must be higher than the starting page.");
+			        	return false;
+			        }else if(lastPage == firstPage){
+			        	System.out.println("Warning: Last page is equal to starting page.");
+			        }
+
+			    }
+	        }
+	        
 	    }
 
 	    return true;
