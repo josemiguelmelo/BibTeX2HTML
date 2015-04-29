@@ -4,97 +4,98 @@
 
 PARSER_BEGIN(BibTex)
 
-	import java.util.*;
+import java.util.*;
 
-	public class BibTex {
-		private static String fileToParse;
+public class BibTex {
+	private static String fileToParse;
 
 
-		public String paramName;
+	public String paramName;
 
-		private static Semantic semantic;
+	private static Semantic semantic;
 
-		public static void main(String args[]) throws ParseException {
+	public static void main(String args[]) throws ParseException {
 
-			semantic = new Semantic();
+		semantic = new Semantic();
 
-			System.out.println("====================================\n");
-			System.out.println(args[0] + " is being parsed.\n");
-			System.out.println("====================================\n");
+		System.out.println("====================================\n");
+		System.out.println(args[0] + " is being parsed.\n");
+		System.out.println("====================================\n");
 
-			fileToParse = args[0];
+		fileToParse = args[0];
 
-			try{
-				BibTex parser = new BibTex(new java.io.FileInputStream(fileToParse));
-				SimpleNode root = parser.Start();
+		try{
+			BibTex parser = new BibTex(new java.io.FileInputStream(fileToParse));
+			SimpleNode root = parser.Start();
 
-				//root.dump("");
+			//root.dump("");
 
-				parser.eval(root);
-			}
-			
-	        catch(java.io.FileNotFoundException e) {
-	          System.out.println ("The file was not found.");
-	          return;
-	        }
+			parser.eval(root);
 		}
-
-		public HashMap<String, String> getBodyParams(SimpleNode bodyNode){
-			HashMap<String, String> params = new HashMap<String, String>();
-			for(int i = 0; i < bodyNode.jjtGetNumChildren() ; i++){
-				SimpleNode param = (SimpleNode) bodyNode.jjtGetChild(i);
-
-				if(param.jjtGetNumChildren()!=0){
-					SimpleNode paramChildNode = (SimpleNode) param.jjtGetChild(0);
-					String paramName = paramChildNode.paramName;
-					String paramValue = (String)paramChildNode.value;
-
-
-					params.put(paramName, paramValue);
-				}
-			}
-			return params;
-		}
-
-
-		public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode)
-		{
-			SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
-			String className = classChildNode.className;
-
-			HashMap<String, String> bodyParams = getBodyParams(bodyNode);
-
-			if(semantic.evalParams(bodyParams, className) == false){
-			}
-			return 0;
-		}
-
-		public int eval(SimpleNode node)
-		{
-			if(node.jjtGetNumChildren() == 0)
-				return 0;
-			else if(node.jjtGetNumChildren() == 1){
-				SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
-				return this.eval(childNode);
-			}
-			else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
-				((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
-				
-				SimpleNode classChild = (SimpleNode) node.jjtGetChild(0); // class
-				SimpleNode bodyChild = (SimpleNode) node.jjtGetChild(1); // body
-
-				return this.evalLanguage(classChild, bodyChild);
-			}
-
-
-			for(int i = 0 ; i < node.jjtGetNumChildren() ; i++)
-			{
-				this.eval((SimpleNode) node.jjtGetChild(i));
-			}
-
-			return 0;
-		}
+		
+        catch(java.io.FileNotFoundException e) {
+          System.out.println ("The file was not found.");
+          return;
+        }
 	}
+
+	public HashMap<String, String> getBodyParams(SimpleNode bodyNode){
+		HashMap<String, String> params = new HashMap<String, String>();
+		for(int i = 0; i < bodyNode.jjtGetNumChildren() ; i++){
+			SimpleNode param = (SimpleNode) bodyNode.jjtGetChild(i);
+
+			if(param.jjtGetNumChildren()!=0){
+				SimpleNode paramChildNode = (SimpleNode) param.jjtGetChild(0);
+				String paramName = paramChildNode.paramName;
+				String paramValueClean = semantic.cleanTokens((String)paramChildNode.value);
+
+				System.out.println(paramValueClean);
+
+				params.put(paramName, paramValueClean);
+			}
+		}
+		return params;
+	}
+
+
+	public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode)
+	{
+		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
+		String className = classChildNode.className;
+
+		HashMap<String, String> bodyParams = getBodyParams(bodyNode);
+
+		if(semantic.evalParams(bodyParams, className) == false){
+		}
+		return 0;
+	}
+
+	public int eval(SimpleNode node)
+	{
+		if(node.jjtGetNumChildren() == 0)
+			return 0;
+		else if(node.jjtGetNumChildren() == 1){
+			SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
+			return this.eval(childNode);
+		}
+		else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
+			((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
+			
+			SimpleNode classChild = (SimpleNode) node.jjtGetChild(0); // class
+			SimpleNode bodyChild = (SimpleNode) node.jjtGetChild(1); // body
+
+			return this.evalLanguage(classChild, bodyChild);
+		}
+
+
+		for(int i = 0 ; i < node.jjtGetNumChildren() ; i++)
+		{
+			this.eval((SimpleNode) node.jjtGetChild(i));
+		}
+
+		return 0;
+	}
+}
 
 PARSER_END(BibTex)
 
@@ -192,23 +193,26 @@ try{
 **/
 
 
-void Author(): {} 
+void Author(): {Token input;} 
 {
-	<AUTHOR> <EQUAL> <STRING>
+	<AUTHOR> <EQUAL> input = <STRING>
 
 	{jjtThis.paramName = "author";}
+	{jjtThis.value = input.image;}
 }
 
-void Title():{}
+void Title():{Token input;}
 {
-	<TITLE> <EQUAL> <STRING>
+	<TITLE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "title";}
+	{jjtThis.value = input.image;}
 }
 
-void Year():{}
+void Year():{Token input;}
 {
-	<YEAR> <EQUAL> <DIGITS> 
+	<YEAR> <EQUAL> input = <DIGITS> 
 	{jjtThis.paramName = "year";}
+	{jjtThis.value = input.image;}
 }
 
 
@@ -221,128 +225,148 @@ void Pages():{Token input;}
 }
 	
 
-void Month():{}
+void Month():{Token input;}
 {
-	<MONTH> <EQUAL> <STRING>
+	<MONTH> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "month";}
+	{jjtThis.value = input.image;}
 }
 	
 
-void Note():{}
+void Note():{Token input;}
 {
-	<NOTE> <EQUAL> <STRING>
+	<NOTE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "note";}
+	{jjtThis.value = input.image;}
 }
 	
 
-void Key():{}
+void Key():{Token input;}
 {
-	<KEY> <EQUAL> <STRING>
+	<KEY> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "key";}
+	{jjtThis.value = input.image;}
 }
 	
 	
-void Editor():{}
+void Editor():{Token input;}
 {
-	<EDITOR> <EQUAL> <STRING>
+	<EDITOR> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "editor";}
+	{jjtThis.value = input.image;}
 }
 	
-void Publisher(): {}
+void Publisher(): {Token input;}
 {
-	<PUBLISHER> <EQUAL> <STRING>
+	<PUBLISHER> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "publisher";}
+	{jjtThis.value = input.image;}
 }
 
-void Number():{}
+void Number():{Token input;}
 {
-	<NUMBER> <EQUAL> <DIGITS> 
+	<NUMBER> <EQUAL> input = <DIGITS> 
 	{jjtThis.paramName = "number";}
+	{jjtThis.value = input.image;}
 }
 
 
-void Address():{}
+void Address():{Token input;}
 {
-	<ADDRESS> <EQUAL> <STRING>
+	<ADDRESS> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "address";}
+	{jjtThis.value = input.image;}
 }
 
-void Series():{}
+void Series():{Token input;}
 {
-	<SERIES> <EQUAL> <STRING>
+	<SERIES> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "series";}
+	{jjtThis.value = input.image;}
 }
 
-void Edition():{}
+void Edition():{Token input;}
 {
-	<EDITION> <EQUAL> <STRING>
+	<EDITION> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "edition";}
+	{jjtThis.value = input.image;}
 }
 
-void HowPublished():{}
+void HowPublished():{Token input;}
 {
-	<HOWPUBLISHED> <EQUAL> <STRING>
+	<HOWPUBLISHED> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "howpublished";}
+	{jjtThis.value = input.image;}
 }
 
-void Chapter():{}
+void Chapter():{Token input;}
 {
-	<CHAPTER> <EQUAL> <STRING>
+	<CHAPTER> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "chapter";}
+	{jjtThis.value = input.image;}
 }
 
-void Type():{}
+void Type():{Token input;}
 {
-	<TYPE> <EQUAL> <STRING>
+	<TYPE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "type";}
+	{jjtThis.value = input.image;}
 }
 
 
-void Annote():{}
+void Annote():{Token input;}
 {
-    <ANNOTE> <EQUAL> <STRING>
+    <ANNOTE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "annote";}
+	{jjtThis.value = input.image;}
 }
 
-void BookTitle():{}
+void BookTitle():{Token input;}
 {
-    <BOOKTITLE> <EQUAL> <STRING>
+    <BOOKTITLE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "booktitle";}
+	{jjtThis.value = input.image;}
 }
 
-void CrossRef():{}
+void CrossRef():{Token input;}
 {
-    <CROSSREF> <EQUAL> <STRING>
+    <CROSSREF> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "crossref";}
+	{jjtThis.value = input.image;}
 }
 
-void Institution():{}
+void Institution():{Token input;}
 {
-    <INSTITUTION> <EQUAL> <STRING>
+    <INSTITUTION> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "institution";}
+	{jjtThis.value = input.image;}
 }
 
-void Journal():{}
+void Journal():{Token input;}
 {
-    <JOURNAL> <EQUAL> <STRING>
+    <JOURNAL> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "journal";}
+	{jjtThis.value = input.image;}
 }
-void Organization():{}
+void Organization():{Token input;}
 {
-    <ORGANIZATION> <EQUAL> <STRING>
+    <ORGANIZATION> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "organization";}
+	{jjtThis.value = input.image;}
 }
 
-void School():{}
+void School():{Token input;}
 {
-    <SCHOOL> <EQUAL> <STRING>
+    <SCHOOL> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "school";}
+	{jjtThis.value = input.image;}
 }
 
-void Volume():{}
+void Volume():{Token input;}
 {
-    <VOLUME> <EQUAL> <STRING>
+    <VOLUME> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "volume";}
+	{jjtThis.value = input.image;}
 }
 
 
@@ -465,7 +489,7 @@ void Language() : {Token mainClass, id;}
 	{ jjtThis.paramName = "language"; }
 	Class()
 	<OPEN_BRACKET>
-
+	//TODO retornar o id também?
 	id = <STRING>
 
 	Body()

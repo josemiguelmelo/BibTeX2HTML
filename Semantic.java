@@ -33,6 +33,17 @@ public class Semantic{
         }
 	}
 
+	public String cleanTokens(String tokenValue) {
+		if(tokenValue.length()!=0) {
+			if(tokenValue.charAt(0) == '{' ||
+				tokenValue.charAt(0) == '\"' ) {
+
+				tokenValue = tokenValue.substring(1,tokenValue.length()-1);
+			}
+		}
+		return tokenValue;
+	}
+
 	private boolean pagesInputValid(String pagesInput){
 		pagesInput = pagesInput.replace("\"", "");
 
