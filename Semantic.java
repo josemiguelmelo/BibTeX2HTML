@@ -1,12 +1,24 @@
 import java.util.*;
 
+import JsonParser.JsonSemanticParser;
+
+import java.io.*;
+
 public class Semantic{
 
 	public HashMap<String, HashMap<String, Boolean>> entriesSemantic;
 
+	public JsonSemanticParser semanticParser;
+
+
+
 	public Semantic(){
 		entriesSemantic = new HashMap<String, HashMap<String, Boolean>> ();
+
+		this.semanticParser = new JsonSemanticParser("config.json");
+
 		init();
+
 	}
 
 	private HashMap<String, Boolean> getArticleElement(){
@@ -27,7 +39,15 @@ public class Semantic{
 	}
 
 	public void init(){
-		entriesSemantic.put("article", getArticleElement());
+
+		try {
+            this.semanticParser.parse();
+
+            this.entriesSemantic = this.semanticParser.getConfigInformation();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
 	public boolean evalParams(ArrayList<String> paramsList, String className){
@@ -40,9 +60,19 @@ public class Semantic{
 	        Map.Entry pair = (Map.Entry)it.next();
 
 	        if(pair.getValue().equals(true)){
-	        	if(!paramsList.contains(pair.getKey())){
-	        		System.out.println("Required param not found ("+pair.getKey()+").");
-	        		return false;
+
+	        	String[] paramNames = ((String)pair.getKey()).split("/");
+
+	        	if(paramNames.length == 2){
+	        		if(!paramsList.contains(paramNames[0]) && !paramsList.contains(paramNames[1])){
+		        		System.out.println("Required param not found ("+pair.getKey()+").");
+		        		return false;
+		        	}
+	        	}else{
+		        	if(!paramsList.contains(pair.getKey())){
+		        		System.out.println("Required param not found ("+pair.getKey()+").");
+		        		return false;
+		        	}
 	        	}
 	        }
 	    }
