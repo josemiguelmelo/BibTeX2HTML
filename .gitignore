@@ -6,8 +6,10 @@ jjrun
 jjtree
 jjtree.bat
 /lib
+*.java
 !SimpleNode.java
 !Semantic.java
 !JsonSemanticParser.java
+!/org/*
 *.class
 bibtext2html.jj
