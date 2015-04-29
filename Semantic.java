@@ -15,7 +15,7 @@ public class Semantic{
 	public Semantic(){
 		entriesSemantic = new HashMap<String, HashMap<String, Boolean>> ();
 
-		this.semanticParser = new JsonSemanticParser("config.json");
+		this.semanticParser = new JsonSemanticParser("files/config.json");
 
 		init();
 
