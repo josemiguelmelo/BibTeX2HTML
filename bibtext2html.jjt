@@ -49,8 +49,6 @@ public class BibTex {
 				String paramName = paramChildNode.paramName;
 				String paramValueClean = semantic.cleanTokens((String)paramChildNode.value);
 
-				System.out.println(paramValueClean);
-
 				params.put(paramName, paramValueClean);
 			}
 		}
