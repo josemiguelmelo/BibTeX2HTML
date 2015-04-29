@@ -15,7 +15,7 @@ public class Semantic{
 	public Semantic(){
 		entriesSemantic = new HashMap<String, HashMap<String, Boolean>> ();
 
-		this.semanticParser = new JsonSemanticParser("files/config.json");
+		this.semanticParser = new JsonSemanticParser("config/config.json");
 
 		init();
 
@@ -33,6 +33,42 @@ public class Semantic{
         }
 	}
 
+	private boolean pagesInputValid(String pagesInput){
+		pagesInput = pagesInput.replace("\"", "");
+
+	    String[] pages = pagesInput.split("-");
+	   
+	    if(pages.length==2){
+	        int firstPage = Integer.parseInt(pages[0]);
+	        int lastPage = Integer.parseInt(pages[1]);
+	        if(lastPage < firstPage){
+	        	System.out.println("Error: Last page must be higher than the starting page.");
+	        	return false;
+	        }else if(lastPage == firstPage){
+	        	System.out.println("Warning: Last page is equal to starting page.");
+	        }
+	    }
+	    return true;
+	}
+
+	private boolean requiredParamExists(String requiredParam, HashMap<String, String> paramsList){
+		String[] paramNames = requiredParam.split("/");
+
+	    if(paramNames.length == 2){
+	        if(!paramsList.containsKey(paramNames[0]) && !paramsList.containsKey(paramNames[1])){
+		       	System.out.println("Error: Required param not found ("+requiredParam+").");
+		        return false;
+		    }
+	    }else{
+		   	if(!paramsList.containsKey(requiredParam)){
+		        System.out.println("Error: Required param not found ("+requiredParam+").");
+		        return false;
+		    }
+	    }
+	    return true;
+	}
+
+
 	public boolean evalParams(HashMap<String, String> paramsList, String className){
 
 		HashMap<String, Boolean> possibleParams = this.entriesSemantic.get(className);
@@ -40,43 +76,28 @@ public class Semantic{
 		Iterator it = possibleParams.entrySet().iterator();
 
 		while (it.hasNext()) {
-	        Map.Entry pair = (Map.Entry)it.next();
+	        Map.Entry param = (Map.Entry)it.next();
 
-	        if(pair.getValue().equals(true)){
-
-	        	String[] paramNames = ((String)pair.getKey()).split("/");
-
-	        	if(paramNames.length == 2){
-	        		if(!paramsList.containsKey(paramNames[0]) && !paramsList.containsKey(paramNames[1])){
-		        		System.out.println("Required param not found ("+pair.getKey()+").");
-		        		return false;
-		        	}
-	        	}else{
-		        	if(!paramsList.containsKey(pair.getKey())){
-		        		System.out.println("Required param not found ("+pair.getKey()+").");
-		        		return false;
-		        	}
+	        // if param is required
+	        if(param.getValue().equals(true)){
+	        	// verify if required param was inserted in bibtex file
+	        	if(!requiredParamExists((String)param.getKey(), paramsList)){
+	        		return false;
 	        	}
 	        }
 
-	        if(paramsList.containsKey(pair.getKey()) && pair.getKey().equals("pages")){
+	        // if pages exists in params inserted by user and it is a possible param then check if pages input is correct
+	        if(paramsList.containsKey(param.getKey()) && param.getKey().equals("pages")){
+	        	// get pages input
 	        	String pagesString = paramsList.get("pages");
-	        	pagesString = pagesString.replace("\"", "");
 
-			    String[] pages = pagesString.split("-");
-			   
-			    if(pages.length==2){
-			        int firstPage = Integer.parseInt(pages[0]);
-			        int lastPage = Integer.parseInt(pages[1]);
-			        if(lastPage < firstPage){
-			        	System.out.println("Error: Last page must be higher than the starting page.");
-			        	return false;
-			        }else if(lastPage == firstPage){
-			        	System.out.println("Warning: Last page is equal to starting page.");
-			        }
-
-			    }
+	        	if(!pagesInputValid(pagesString)){
+	        		return false;
+	        	}
 	        }
+
+
+
 	        
 	    }
 
