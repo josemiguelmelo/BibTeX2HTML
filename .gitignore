@@ -6,7 +6,6 @@ jjrun
 jjtree
 jjtree.bat
 /lib
-*.java
 !SimpleNode.java
 !Semantic.java
 !JsonSemanticParser.java
