@@ -158,7 +158,7 @@ TOKEN :
 
 TOKEN :
 {
-	< PAGESINPUT : <QUOTE> <DIGITS>(("-"|",")<DIGITS>)? <QUOTE> >
+	< PAGESINPUT : <QUOTE> <DIGITS>(("-"|"--")<DIGITS>)? <QUOTE> >
 }
 
 TOKEN :
