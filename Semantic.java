@@ -44,6 +44,38 @@ public class Semantic{
 		return tokenValue;
 	}
 
+	private int frequencyList(ArrayList<String> list, String element){
+		int counter = 0;
+		for(String el : list){
+			if(el.equals(element)){
+				counter++;
+			}
+        }	
+        return counter;
+	}
+
+	public boolean validateCrossref(HashMap<String, String> paramsList, ArrayList<String> nodeIds, SimpleNode parentNode){
+
+		if(paramsList.containsKey("crossref")){
+			// get pages input
+	        String crossRefId = paramsList.get("crossref");
+	        if(frequencyList(nodeIds, crossRefId) == 1){
+	        	for(String id : nodeIds){
+					if(id.equals(crossRefId)){
+						return true;
+					}
+	        	}
+	        	return false;
+	        }else if(frequencyList(nodeIds, crossRefId) == 0){
+	        	System.out.println("Error: crossref reference not found at line " + parentNode.lineNumber);
+	        	return false;
+	        }
+	       	System.out.println("Error: multiple crossref reference at line " + parentNode.lineNumber);
+	       	return false;
+		}
+		return true;
+	}
+
 	private boolean pagesInputValid(String pagesInput, SimpleNode parentNode){
 		pagesInput = pagesInput.replace("\"", "");
 

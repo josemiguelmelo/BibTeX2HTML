@@ -39,6 +39,8 @@ public class BibTex {
 
 		//root.dump("");
 		parser.eval(root);
+		// cross ref evaluation
+		parser.evalCrossref(root);
 
 		System.out.println("\nParse Finished.\nNumber of errors found: "+ errorsFound);
 	}
@@ -59,6 +61,42 @@ public class BibTex {
 		return params;
 	}
 
+	public int evalCrossrefExpression(SimpleNode classNode, SimpleNode bodyNode, SimpleNode parentNode){
+		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
+		String className = classChildNode.className;
+
+		HashMap<String, String> bodyParams = getBodyParams(bodyNode);
+
+		if(semantic.validateCrossref(bodyParams, nodeIds, parentNode) == false){
+			errorsFound++;
+		}
+		return 0;
+	}
+
+	public int evalCrossref(SimpleNode node){
+		if(node.jjtGetNumChildren() == 0)
+			return 0;
+		else if(node.jjtGetNumChildren() == 1){
+			SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
+			return this.evalCrossref(childNode);
+		}
+		else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
+			((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
+
+			SimpleNode classChild = (SimpleNode) node.jjtGetChild(0); // class
+			SimpleNode bodyChild = (SimpleNode) node.jjtGetChild(1); // body
+
+			return this.evalCrossrefExpression(classChild, bodyChild, node);
+		}
+
+
+		for(int i = 0 ; i < node.jjtGetNumChildren() ; i++)
+		{
+			this.evalCrossref((SimpleNode) node.jjtGetChild(i));
+		}
+
+		return 0;
+	}
 
 	public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode, SimpleNode parentNode)
 	{
