@@ -13,6 +13,10 @@ class SimpleNode implements Node {
 
   public String paramName;
 
+  public String nodeId;
+
+  public int lineNumber;
+
 
   public SimpleNode(int i) {
     id = i;

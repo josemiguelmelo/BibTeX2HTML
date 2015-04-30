@@ -14,27 +14,33 @@ public class BibTex {
 
 	private static Semantic semantic;
 
+	private static ArrayList<String> nodeIds;
+
+	private static int errorsFound;
+
+
 	public static void main(String args[]) throws ParseException {
 
 		semantic = new Semantic();
-
-		System.out.println("====================================\n");
-		System.out.println(args[0] + " is being parsed.\n");
-		System.out.println("====================================\n");
+		nodeIds = new ArrayList<String>();
+		errorsFound = 0;
 
 		fileToParse = args[0];
-
+		java.io.FileInputStream file;
 		try{
-			BibTex parser = new BibTex(new java.io.FileInputStream(fileToParse));
-			SimpleNode root = parser.Start();
-
-			parser.eval(root);
-		}
-		
-        catch(java.io.FileNotFoundException e) {
+			file = new java.io.FileInputStream(fileToParse);
+		} catch(java.io.FileNotFoundException e) {
           System.out.println ("The file was not found.");
           return;
         }
+
+        BibTex parser = new BibTex(file);
+		SimpleNode root = parser.Start();
+
+		//root.dump("");
+		parser.eval(root);
+
+		System.out.println("\nParse Finished.\nNumber of errors found: "+ errorsFound);
 	}
 
 	public HashMap<String, String> getBodyParams(SimpleNode bodyNode){
@@ -54,14 +60,15 @@ public class BibTex {
 	}
 
 
-	public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode)
+	public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode, SimpleNode parentNode)
 	{
 		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
 		String className = classChildNode.className;
 
 		HashMap<String, String> bodyParams = getBodyParams(bodyNode);
 
-		if(semantic.evalParams(bodyParams, className) == false){
+		if(semantic.evalParams(bodyParams, className, parentNode) == false){
+			errorsFound++;
 		}
 		return 0;
 	}
@@ -76,11 +83,19 @@ public class BibTex {
 		}
 		else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
 			((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
+
+			// add language node id to array list with all IDs;
+			String nodeId = node.nodeId;
+			if(nodeIds.contains(nodeId)){
+				System.out.println("Error: Duplicated id. (Line : " + node.lineNumber + ")");	
+				errorsFound++;
+			}
+			nodeIds.add(nodeId);
 			
 			SimpleNode classChild = (SimpleNode) node.jjtGetChild(0); // class
 			SimpleNode bodyChild = (SimpleNode) node.jjtGetChild(1); // body
 
-			return this.evalLanguage(classChild, bodyChild);
+			return this.evalLanguage(classChild, bodyChild, node);
 		}
 
 
@@ -180,13 +195,7 @@ SimpleNode Start() : {}
 
 void Expr() : {}
 {
-
-try{
 	(Language())*
-}catch(Exception e){
-	System.out.println("Invalid format found.\n");
-}
-	
 }
 
 
@@ -486,16 +495,33 @@ void Params(): {}
 	School() | Volume())
 }
 
-void Language() : {Token mainClass, id;}
+JAVACODE
+void ErrorSkipLine(Token id) {
+	Token t;
+	t = getToken(0);
+
+	System.out.println("Error: Invalid syntax at line " + t.beginLine);
+	t = getNextToken();
+
+
+	errorsFound++;
+}
+
+void Language() : {Token id;}
 {
 	{ jjtThis.paramName = "language"; }
 	Class()
 	<OPEN_BRACKET>
 	//TODO retornar o id também?
 	id = <STRING>
+	{jjtThis.lineNumber = id.beginLine;}
 
-	Body()
-
+	{jjtThis.nodeId = id.image; }
+	try{
+		Body() 
+	}catch(Exception e){
+		ErrorSkipLine(id);
+	}
 	<CLOSE_BRACKET>
 
 }

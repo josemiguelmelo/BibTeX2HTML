@@ -44,7 +44,7 @@ public class Semantic{
 		return tokenValue;
 	}
 
-	private boolean pagesInputValid(String pagesInput){
+	private boolean pagesInputValid(String pagesInput, SimpleNode parentNode){
 		pagesInput = pagesInput.replace("\"", "");
 
 	    String[] pages = pagesInput.split("-");
@@ -53,26 +53,26 @@ public class Semantic{
 	        int firstPage = Integer.parseInt(pages[0]);
 	        int lastPage = Integer.parseInt(pages[1]);
 	        if(lastPage < firstPage){
-	        	System.out.println("Error: Last page must be higher than the starting page.");
+	        	System.out.println("Error: Last page must be higher than the starting page. Block line: " + parentNode.lineNumber);
 	        	return false;
 	        }else if(lastPage == firstPage){
-	        	System.out.println("Warning: Last page is equal to starting page.");
+	        	System.out.println("Warning: Last page is equal to starting page. Block line: " + parentNode.lineNumber);
 	        }
 	    }
 	    return true;
 	}
 
-	private boolean requiredParamExists(String requiredParam, HashMap<String, String> paramsList){
+	private boolean requiredParamExists(String requiredParam, HashMap<String, String> paramsList, SimpleNode parentNode){
 		String[] paramNames = requiredParam.split("/");
 
 	    if(paramNames.length == 2){
 	        if(!paramsList.containsKey(paramNames[0]) && !paramsList.containsKey(paramNames[1])){
-		       	System.out.println("Error: Required param not found ("+requiredParam+").");
+		       	System.out.println("Error: Required param not found ("+requiredParam+") at line " + parentNode.lineNumber + ".");
 		        return false;
 		    }
 	    }else{
 		   	if(!paramsList.containsKey(requiredParam)){
-		        System.out.println("Error: Required param not found ("+requiredParam+").");
+		        System.out.println("Error: Required param not found ("+requiredParam+") at line " + parentNode.lineNumber + ".");
 		        return false;
 		    }
 	    }
@@ -80,7 +80,7 @@ public class Semantic{
 	}
 
 
-	public boolean evalParams(HashMap<String, String> paramsList, String className){
+	public boolean evalParams(HashMap<String, String> paramsList, String className, SimpleNode parentNode){
 
 		HashMap<String, Boolean> possibleParams = this.entriesSemantic.get(className);
 
@@ -92,7 +92,7 @@ public class Semantic{
 	        // if param is required
 	        if(param.getValue().equals(true)){
 	        	// verify if required param was inserted in bibtex file
-	        	if(!requiredParamExists((String)param.getKey(), paramsList)){
+	        	if(!requiredParamExists((String)param.getKey(), paramsList, parentNode)){
 	        		return false;
 	        	}
 	        }
@@ -102,7 +102,7 @@ public class Semantic{
 	        	// get pages input
 	        	String pagesString = paramsList.get("pages");
 
-	        	if(!pagesInputValid(pagesString)){
+	        	if(!pagesInputValid(pagesString, parentNode)){
 	        		return false;
 	        	}
 	        }
