@@ -1,6 +1,6 @@
-/*options {
-	LOOKAHEAD=2;
-}*/
+options {
+	UNICODE_INPUT=true;
+}
 
 PARSER_BEGIN(BibTex)
 
@@ -151,7 +151,8 @@ TOKEN :
 	< SCHOOL : "school" > |
 	< VOLUME : "volume" > |
 	< DIGITS : (["0" - "9"])+ > |
-	< SPECIFIC_CHAR : ("'a" | "\"a" | "~a" | "cc" | "'i" | "'o" | "~o" | "\"o" )  >
+	< SPECIFIC_CHAR : ( ("\\" ("\u2018" | "\u201D" | "\u002E" | "\u0048" | "\u0064" | "\u2019" | "\u007E" | "\u0075" | "\u0062" | "\u005E" | "\u003D" | "\u0076" | "\u0063" ) <OPEN_BRACKET>["a"-"z","A"-"Z"]<CLOSE_BRACKET> ) 
+					| ("\\" "\u0074" "{"["a"-"z","A"-"Z"]["a"-"z","A"-"Z"]"}") ) >
 }
 
 TOKEN : 
