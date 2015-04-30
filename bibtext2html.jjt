@@ -28,8 +28,6 @@ public class BibTex {
 			BibTex parser = new BibTex(new java.io.FileInputStream(fileToParse));
 			SimpleNode root = parser.Start();
 
-			//root.dump("");
-
 			parser.eval(root);
 		}
 		
@@ -48,7 +46,7 @@ public class BibTex {
 				SimpleNode paramChildNode = (SimpleNode) param.jjtGetChild(0);
 				String paramName = paramChildNode.paramName;
 				String paramValueClean = semantic.cleanTokens((String)paramChildNode.value);
-
+				//System.out.println(paramValueClean);
 				params.put(paramName, paramValueClean);
 			}
 		}
@@ -152,8 +150,13 @@ TOKEN :
 	< ORGANIZATION : "organization" > |
 	< SCHOOL : "school" > |
 	< VOLUME : "volume" > |
-	< DIGITS : (["0" - "9"])+ >
+	< DIGITS : (["0" - "9"])+ > |
+	< SPECIFIC_CHAR : ("'a" | "\"a" | "~a" | "cc" | "'i" | "'o" | "~o" | "\"o" )  >
+}
 
+TOKEN : 
+{
+	< SPECIAL_CHAR : <OPEN_BRACKET> <SPECIFIC_CHAR> <CLOSE_BRACKET> >
 }
 
 TOKEN :
@@ -163,9 +166,9 @@ TOKEN :
 
 TOKEN :
 {
-	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <QUOTE>) 
-		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>)+
-		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>)+ <CLOSE_BRACKET>))>
+	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>|<SPECIAL_CHAR>)+ <QUOTE>) 
+		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIAL_CHAR>)+
+		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>|<SPECIAL_CHAR>)+ <CLOSE_BRACKET>))>
 }
 
 
