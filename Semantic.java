@@ -129,7 +129,7 @@ public class Semantic{
 	}
 
 	/**
-	* 
+	* Evaluates the specified parameters for each class found
 	*/
 	public boolean evalParams(HashMap<String, String> paramsList, String className, SimpleNode parentNode){
 		HashMap<String, Boolean> possibleParams = this.entriesSemantic.get(className);
