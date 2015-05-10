@@ -7,10 +7,7 @@ import java.io.*;
 public class Semantic{
 
 	public HashMap<String, HashMap<String, Boolean>> entriesSemantic;
-
 	public JsonSemanticParser semanticParser;
-
-
 
 	public Semantic(){
 		entriesSemantic = new HashMap<String, HashMap<String, Boolean>> ();
@@ -21,6 +18,9 @@ public class Semantic{
 
 	}
 
+	/**
+	* Starts parsing the json file and creates an HashMap of the specified parameters
+	*/
 	public void init(){
 
 		try {
@@ -33,6 +33,9 @@ public class Semantic{
         }
 	}
 
+	/**
+	* Receives a token between {} or "" and retrieves with clean
+	*/
 	public String cleanTokens(String tokenValue) {
 		if(tokenValue.length()!=0) {
 			if(tokenValue.charAt(0) == '{' ||
@@ -44,6 +47,9 @@ public class Semantic{
 		return tokenValue;
 	}
 
+	/**
+	* Checks how many times an element is in a list to later be used by validateCrossRef
+	*/
 	private int frequencyList(ArrayList<String> list, String element){
 		int counter = 0;
 		for(String el : list){
@@ -54,8 +60,10 @@ public class Semantic{
         return counter;
 	}
 
+	/**
+	* Checks if the specified crossref is an identifier of an existent class
+	*/
 	public boolean validateCrossref(HashMap<String, String> paramsList, ArrayList<String> nodeIds, SimpleNode parentNode){
-
 		if(paramsList.containsKey("crossref")){
 			// get pages input
 	        String crossRefId = paramsList.get("crossref");
@@ -76,10 +84,14 @@ public class Semantic{
 		return true;
 	}
 
+	/**
+	* Checks if the pages input is properly specified 
+	* Final page must be higher or equal to the initial page
+	*/
 	private boolean pagesInputValid(String pagesInput, SimpleNode parentNode){
 		pagesInput = pagesInput.replace("\"", "");
 
-	    String[] pages = pagesInput.split("-");
+	    String[] pages = pagesInput.split("--");
 	   
 	    if(pages.length==2){
 	        int firstPage = Integer.parseInt(pages[0]);
@@ -94,9 +106,14 @@ public class Semantic{
 	    return true;
 	}
 
+	/**
+	* Checks if all the required parameters really exist in the current file
+	*/
 	private boolean requiredParamExists(String requiredParam, HashMap<String, String> paramsList, SimpleNode parentNode){
 		String[] paramNames = requiredParam.split("/");
 
+		//in some classes the required parameters can be either two things
+		// In that cases must be evaluated separatly otherways proceeds normally
 	    if(paramNames.length == 2){
 	        if(!paramsList.containsKey(paramNames[0]) && !paramsList.containsKey(paramNames[1])){
 		       	System.out.println("Error: Required param not found ("+requiredParam+") at line " + parentNode.lineNumber + ".");
@@ -111,9 +128,10 @@ public class Semantic{
 	    return true;
 	}
 
-
+	/**
+	* 
+	*/
 	public boolean evalParams(HashMap<String, String> paramsList, String className, SimpleNode parentNode){
-
 		HashMap<String, Boolean> possibleParams = this.entriesSemantic.get(className);
 
 		Iterator it = possibleParams.entrySet().iterator();
@@ -138,13 +156,7 @@ public class Semantic{
 	        		return false;
 	        	}
 	        }
-
-
-
-	        
 	    }
-
 	    return true;
-
 	}
 }

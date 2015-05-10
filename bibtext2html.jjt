@@ -61,6 +61,10 @@ public class BibTex {
 		return params;
 	}
 
+	/**
+	* This function is called whenever a class/body pair is found in the tree
+	* Evaluates each crossref reference found
+	*/
 	public int evalCrossrefExpression(SimpleNode classNode, SimpleNode bodyNode, SimpleNode parentNode){
 		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
 		String className = classChildNode.className;
@@ -73,13 +77,20 @@ public class BibTex {
 		return 0;
 	}
 
+	/**
+	* Same methodology of the eval function
+	* Runs through the tree and checks if the references found are valid
+	*/
 	public int evalCrossref(SimpleNode node){
+		//ended evaluation
 		if(node.jjtGetNumChildren() == 0)
 			return 0;
+		//root node
 		else if(node.jjtGetNumChildren() == 1){
 			SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
 			return this.evalCrossref(childNode);
 		}
+		// Class / Body pair, required to check if it is properly built
 		else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
 			((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
 
@@ -89,7 +100,6 @@ public class BibTex {
 			return this.evalCrossrefExpression(classChild, bodyChild, node);
 		}
 
-
 		for(int i = 0 ; i < node.jjtGetNumChildren() ; i++)
 		{
 			this.evalCrossref((SimpleNode) node.jjtGetChild(i));
@@ -98,6 +108,10 @@ public class BibTex {
 		return 0;
 	}
 
+	/**
+	* This function is called whenever a class/body pair is found in the tree
+	* Evaluates each parameter of body for the specified class
+	*/
 	public int evalLanguage(SimpleNode classNode, SimpleNode bodyNode, SimpleNode parentNode)
 	{
 		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
@@ -105,6 +119,7 @@ public class BibTex {
 
 		HashMap<String, String> bodyParams = getBodyParams(bodyNode);
 
+		//checks if the parameters found are enough to properly build the specified class
 		if(semantic.evalParams(bodyParams, className, parentNode) == false){
 			errorsFound++;
 		}
@@ -113,12 +128,15 @@ public class BibTex {
 
 	public int eval(SimpleNode node)
 	{
+		//if no longer has chields, ends the evaluation
 		if(node.jjtGetNumChildren() == 0)
 			return 0;
+		//if has 1 node, it is the root none and proceeds the evaluation
 		else if(node.jjtGetNumChildren() == 1){
 			SimpleNode childNode = (SimpleNode) node.jjtGetChild(0);
 			return this.eval(childNode);
 		}
+		//if has 2 nodes, it is the Class / Body , and calls evalLanguage to properly evaluate them
 		else if(node.jjtGetNumChildren() == 2 && ((SimpleNode)node.jjtGetChild(0)).toString() == "Class" && 
 			((SimpleNode)node.jjtGetChild(1)).toString() == "Body" ){
 
@@ -135,7 +153,6 @@ public class BibTex {
 
 			return this.evalLanguage(classChild, bodyChild, node);
 		}
-
 
 		for(int i = 0 ; i < node.jjtGetNumChildren() ; i++)
 		{
@@ -550,17 +567,16 @@ void Language() : {Token id;}
 	{ jjtThis.paramName = "language"; }
 	Class()
 	<OPEN_BRACKET>
-	//TODO retornar o id também?
 	id = <STRING>
-	{jjtThis.lineNumber = id.beginLine;}
 
+	{jjtThis.lineNumber = id.beginLine;}
 	{jjtThis.nodeId = id.image; }
+
 	try{
 		Body() 
 	}catch(Exception e){
 		ErrorSkipLine(id);
 	}
 	<CLOSE_BRACKET>
-
 }
 
