@@ -38,13 +38,17 @@ public class BibTex {
 		SimpleNode root = parser.Start();
 
 		//root.dump("");
+		//Starts the evaluation
 		parser.eval(root);
-		// cross ref evaluation
+		//After the first final evaluation checks the crossref references
 		parser.evalCrossref(root);
 
 		System.out.println("\nParse Finished.\nNumber of errors found: "+ errorsFound);
 	}
 
+	/**
+	* For a specified class gets all the parameters passed through the BibTex File.
+	*/
 	public HashMap<String, String> getBodyParams(SimpleNode bodyNode){
 		HashMap<String, String> params = new HashMap<String, String>();
 		for(int i = 0; i < bodyNode.jjtGetNumChildren() ; i++){
@@ -126,6 +130,9 @@ public class BibTex {
 		return 0;
 	}
 
+	/**
+	* Main function that evalues all the nodes for the current tree
+	*/
 	public int eval(SimpleNode node)
 	{
 		//if no longer has chields, ends the evaluation
