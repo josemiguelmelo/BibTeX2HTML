@@ -18,6 +18,17 @@ public class BibTex {
 
 	private static int errorsFound;
 
+	private static HashMap<String , HashMap<String, String>> representation;
+
+	private static String outputLocation;
+
+
+	private static String outputLocation(String outputLocation){
+		if(outputLocation.contains(".html"))
+			return outputLocation;
+		else
+			return outputLocation + ".html";
+	}
 
 	public static void main(String args[]) throws ParseException {
 
@@ -25,7 +36,14 @@ public class BibTex {
 		nodeIds = new ArrayList<String>();
 		errorsFound = 0;
 
+		if(args.length != 2){
+			System.out.println("Arguments not valid.\njava BibTex <file_to_parse> <output_location>");
+			return;
+		}
 		fileToParse = args[0];
+		outputLocation = outputLocation(args[1]);
+
+
 		java.io.FileInputStream file;
 		try{
 			file = new java.io.FileInputStream(fileToParse);
@@ -43,8 +61,82 @@ public class BibTex {
 		//After the first final evaluation checks the crossref references
 		parser.evalCrossref(root);
 
+		if(errorsFound == 0){
+			parser.generateIntermediateRepresentation();
+			try{
+				parser.generateHTML();
+			}catch(Exception e){
+				System.out.println("Error creating HTML file.");
+			}
+		}
+
 		System.out.println("\nParse Finished.\nNumber of errors found: "+ errorsFound);
 	}
+
+	public void generateIntermediateRepresentation(){
+		representation = semantic.representation;
+	}
+
+	public void generateHTML() throws Exception
+	{
+		java.io.PrintWriter htmlFile = new java.io.PrintWriter(outputLocation, "UTF-8");
+
+		String header = "<html><head><title> " + fileToParse.split("\\.")[0] + " </title></head>";
+
+		String bodyInit = "<body>";
+
+		String bodyEnd = "</body></html>";
+
+		ArrayList<String> bodyContent = new ArrayList<String>();
+
+		bodyContent.add(header);
+		bodyContent.add(bodyInit);
+
+
+		Iterator it = representation.entrySet().iterator();
+
+		while (it.hasNext()) {
+	        Map.Entry classStructure = (Map.Entry)it.next();
+
+	        String classContent = "<div style='width: 200px; margin-bottom: 2em;'><div style='color: blue; margin-bottom: 1.5em;'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
+    		String idString = "<div style='border-radius: 7px;'><label style='color: #89BCDB;'>ID = </label>"  + ((String)classStructure.getKey()).split("-")[1] +  "<br><br></div>";
+    		
+    		String tableString = "<div><table style='border: 1px solid gray; padding: 0.4em; width: 300px;'><thead style='color: red;'><tr><td>Param</td><td class='value_table'>Value</td></tr></thead>";
+    		String tableBodyInitString = "<tbody style='border: 1px solid gray;'>";
+
+    		
+    		String tableBodyEndString = "</tbody></table></div></div>";
+
+    		bodyContent.add(classContent);
+    		bodyContent.add(idString);
+    		bodyContent.add(tableString);
+    		bodyContent.add(tableBodyInitString);
+
+			Iterator classIterator = ((HashMap<String, String>)classStructure.getValue()).entrySet().iterator();
+
+			while (classIterator.hasNext()) {
+	        	Map.Entry params = (Map.Entry) classIterator.next();
+
+	        	String tableRow = "<tr><td>" + params.getKey() + "</td><td class='value_table'>"+ params.getValue() +"</td></tr>";
+
+
+	        	bodyContent.add(tableRow);
+    		
+	    	}
+
+	    	bodyContent.add(tableBodyEndString);
+
+	    }
+
+	    bodyContent.add(bodyEnd);
+
+	    for(int i = 0; i < bodyContent.size(); i++){
+			htmlFile.println(bodyContent.get(i));	
+	    }
+
+		htmlFile.close();
+	}
+
 
 	/**
 	* For a specified class gets all the parameters passed through the BibTex File.

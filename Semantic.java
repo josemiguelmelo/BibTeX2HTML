@@ -9,10 +9,15 @@ public class Semantic{
 	public HashMap<String, HashMap<String, Boolean>> entriesSemantic;
 	public JsonSemanticParser semanticParser;
 
+	public HashMap<String , HashMap<String, String>> representation;
+
 	public Semantic(){
+		this.representation = new HashMap<String, HashMap<String, String>>();
+
 		entriesSemantic = new HashMap<String, HashMap<String, Boolean>> ();
 
 		this.semanticParser = new JsonSemanticParser("config/config.json");
+
 
 		init();
 
@@ -203,6 +208,7 @@ public class Semantic{
 	        System.out.println("Warning: Invalid optional param in line " + parentNode.lineNumber + ".");
 	    }
 
+	    representation.put(className + "-" + parentNode.nodeId , paramsList);
 
 	    return true;
 	}

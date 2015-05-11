@@ -20,7 +20,7 @@ javac *.java
 You should run the BibTex class. To do so, run the following command:
 
 ```
-java BibTex <file_to_parse>
+java BibTex <file_to_parse> <output_location>
 ```
 
 #Grammar
