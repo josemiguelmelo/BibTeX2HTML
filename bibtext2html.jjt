@@ -65,8 +65,9 @@ public class BibTex {
 			parser.generateIntermediateRepresentation();
 			try{
 				parser.generateHTML();
+				System.out.println("HTML file generated successfully. Location: " + outputLocation);
 			}catch(Exception e){
-				System.out.println("Error creating HTML file.");
+				System.out.println("Error creating HTML file. Check if folder exists.");
 			}
 		}
 
@@ -153,7 +154,7 @@ public class BibTex {
 
 				if(params.containsKey(paramName)){
 					if(evalType.equals("semantic"))
-						System.out.println("Warning: already defined paramenter " + paramName + " (line " + paramChildNode.lineNumber + "), considering only the first one.");
+						System.out.println("Warning: Already defined parameter " + paramName + " (line " + paramChildNode.lineNumber + "), considering only the first one.");
 				}
 				else {
 					params.put(paramName, paramValueClean);	
