@@ -128,6 +128,36 @@ public class Semantic{
 	    return true;
 	}
 
+	private boolean paramExistsInClassParamsList(String param,  HashMap<String , Boolean> classParamsList){
+		Iterator it = classParamsList.entrySet().iterator();
+
+		while (it.hasNext()) {
+			Map.Entry paramMap = (Map.Entry) it.next();
+
+			String paramName = (String) paramMap.getKey();
+
+			if(paramName.contains(param))
+				return true;
+		}
+
+		return false;
+	}
+
+	public boolean isOptionalValid(HashMap<String, String> paramsList, HashMap<String , Boolean> classParamsList){
+		Iterator it = paramsList.entrySet().iterator();
+
+		while (it.hasNext()) {
+			Map.Entry param = (Map.Entry) it.next();
+
+			String paramName = (String) param.getKey();
+
+			if(paramExistsInClassParamsList(paramName, classParamsList) == false)
+				return false;
+		}
+
+		return true;
+	}
+
 	/**
 	* Evaluates the specified parameters for each class found
 	*/
@@ -135,6 +165,9 @@ public class Semantic{
 		HashMap<String, Boolean> possibleParams = this.entriesSemantic.get(className);
 
 		Iterator it = possibleParams.entrySet().iterator();
+
+		boolean invalidOptionalParamExists = false;
+
 
 		while (it.hasNext()) {
 	        Map.Entry param = (Map.Entry)it.next();
@@ -147,16 +180,30 @@ public class Semantic{
 	        	}
 	        }
 
+	        if(isOptionalValid(paramsList, possibleParams) == false){
+	        	invalidOptionalParamExists = true;
+	        }
+
 	        // if pages exists in params inserted by user and it is a possible param then check if pages input is correct
 	        if(paramsList.containsKey(param.getKey()) && param.getKey().equals("pages")){
 	        	// get pages input
 	        	String pagesString = paramsList.get("pages");
 
 	        	if(!pagesInputValid(pagesString, parentNode)){
+	        		if(invalidOptionalParamExists){
+	        			System.out.println("Warning: Invalid optional param in line " + parentNode.lineNumber + ".");
+	        		}
+
 	        		return false;
 	        	}
 	        }
 	    }
+
+	    if(invalidOptionalParamExists){
+	        System.out.println("Warning: Invalid optional param in line " + parentNode.lineNumber + ".");
+	    }
+
+
 	    return true;
 	}
 }
