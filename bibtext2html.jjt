@@ -141,7 +141,7 @@ public class BibTex {
 	/**
 	* For a specified class gets all the parameters passed through the BibTex File.
 	*/
-	public HashMap<String, String> getBodyParams(SimpleNode bodyNode){
+	public HashMap<String, String> getBodyParams(SimpleNode bodyNode, String evalType){
 		HashMap<String, String> params = new HashMap<String, String>();
 		for(int i = 0; i < bodyNode.jjtGetNumChildren() ; i++){
 			SimpleNode param = (SimpleNode) bodyNode.jjtGetChild(i);
@@ -150,8 +150,15 @@ public class BibTex {
 				SimpleNode paramChildNode = (SimpleNode) param.jjtGetChild(0);
 				String paramName = paramChildNode.paramName;
 				String paramValueClean = semantic.cleanTokens((String)paramChildNode.value);
-				//System.out.println(paramValueClean);
-				params.put(paramName, paramValueClean);
+
+				if(params.containsKey(paramName)){
+					if(evalType.equals("semantic"))
+						System.out.println("Warning: already defined paramenter " + paramName + " (line " + paramChildNode.lineNumber + "), considering only the first one.");
+				}
+				else {
+					params.put(paramName, paramValueClean);	
+				}
+				
 			}
 		}
 		return params;
@@ -165,7 +172,7 @@ public class BibTex {
 		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
 		String className = classChildNode.className;
 
-		HashMap<String, String> bodyParams = getBodyParams(bodyNode);
+		HashMap<String, String> bodyParams = getBodyParams(bodyNode,"crossref");
 
 		if(semantic.validateCrossref(bodyParams, nodeIds, parentNode) == false){
 			errorsFound++;
@@ -213,7 +220,7 @@ public class BibTex {
 		SimpleNode classChildNode = (SimpleNode) classNode.jjtGetChild(0);
 		String className = classChildNode.className;
 
-		HashMap<String, String> bodyParams = getBodyParams(bodyNode);
+		HashMap<String, String> bodyParams = getBodyParams(bodyNode,"semantic");
 
 		//checks if the parameters found are enough to properly build the specified class
 		if(semantic.evalParams(bodyParams, className, parentNode) == false){
@@ -369,6 +376,7 @@ void Author(): {Token input;}
 
 	{jjtThis.paramName = "author";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Title():{Token input;}
@@ -376,6 +384,7 @@ void Title():{Token input;}
 	<TITLE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "title";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Year():{Token input;}
@@ -383,6 +392,7 @@ void Year():{Token input;}
 	<YEAR> <EQUAL> input = <DIGITS> 
 	{jjtThis.paramName = "year";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 
@@ -392,6 +402,7 @@ void Pages():{Token input;}
 
 	{jjtThis.paramName = "pages";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 	
 
@@ -400,6 +411,7 @@ void Month():{Token input;}
 	<MONTH> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "month";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 	
 
@@ -408,6 +420,7 @@ void Note():{Token input;}
 	<NOTE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "note";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 	
 
@@ -416,6 +429,7 @@ void Key():{Token input;}
 	<KEY> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "key";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 	
 	
@@ -424,6 +438,7 @@ void Editor():{Token input;}
 	<EDITOR> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "editor";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 	
 void Publisher(): {Token input;}
@@ -431,6 +446,7 @@ void Publisher(): {Token input;}
 	<PUBLISHER> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "publisher";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Number():{Token input;}
@@ -438,6 +454,7 @@ void Number():{Token input;}
 	<NUMBER> <EQUAL> input = <DIGITS> 
 	{jjtThis.paramName = "number";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 
@@ -446,6 +463,7 @@ void Address():{Token input;}
 	<ADDRESS> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "address";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Series():{Token input;}
@@ -453,6 +471,7 @@ void Series():{Token input;}
 	<SERIES> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "series";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Edition():{Token input;}
@@ -460,6 +479,7 @@ void Edition():{Token input;}
 	<EDITION> <EQUAL> input = <ORDINAL>
 	{jjtThis.paramName = "edition";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void HowPublished():{Token input;}
@@ -467,6 +487,7 @@ void HowPublished():{Token input;}
 	<HOWPUBLISHED> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "howpublished";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Chapter():{Token input;}
@@ -474,6 +495,7 @@ void Chapter():{Token input;}
 	<CHAPTER> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "chapter";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Type():{Token input;}
@@ -481,6 +503,7 @@ void Type():{Token input;}
 	<TYPE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "type";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 
@@ -489,6 +512,7 @@ void Annote():{Token input;}
     <ANNOTE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "annote";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void BookTitle():{Token input;}
@@ -496,6 +520,7 @@ void BookTitle():{Token input;}
     <BOOKTITLE> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "booktitle";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void CrossRef():{Token input;}
@@ -503,6 +528,7 @@ void CrossRef():{Token input;}
     <CROSSREF> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "crossref";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Institution():{Token input;}
@@ -510,6 +536,7 @@ void Institution():{Token input;}
     <INSTITUTION> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "institution";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Journal():{Token input;}
@@ -517,12 +544,14 @@ void Journal():{Token input;}
     <JOURNAL> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "journal";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 void Organization():{Token input;}
 {
     <ORGANIZATION> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "organization";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void School():{Token input;}
@@ -530,6 +559,7 @@ void School():{Token input;}
     <SCHOOL> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "school";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 void Volume():{Token input;}
@@ -537,6 +567,7 @@ void Volume():{Token input;}
     <VOLUME> <EQUAL> input = <STRING>
 	{jjtThis.paramName = "volume";}
 	{jjtThis.value = input.image;}
+	{jjtThis.lineNumber = input.beginLine;}
 }
 
 
