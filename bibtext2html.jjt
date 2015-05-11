@@ -244,11 +244,16 @@ TOKEN :
 
 TOKEN :
 {
+	< ORDINAL : <QUOTE> ("first"|"second"|"third"|"fourth"|"fifth"|"sixth") <QUOTE> >	
+}
+
+
+TOKEN :
+{
 	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>|<SPECIAL_CHAR>)+ <QUOTE>) 
 		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIAL_CHAR>)+
 		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>|<SPECIAL_CHAR>)+ <CLOSE_BRACKET>))>
 }
-
 
 SimpleNode Start() : {}
 {
@@ -360,7 +365,7 @@ void Series():{Token input;}
 
 void Edition():{Token input;}
 {
-	<EDITION> <EQUAL> input = <STRING>
+	<EDITION> <EQUAL> input = <ORDINAL>
 	{jjtThis.paramName = "edition";}
 	{jjtThis.value = input.image;}
 }
