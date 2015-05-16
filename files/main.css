@@ -1,0 +1,17 @@
+.class {
+  margin-left: 30% ;
+  margin-right: 30% ;
+  width: 500px;
+}
+
+.class * {
+	text-align: center;
+}
+
+.param {
+	font-weight: bold;
+}
+
+.value_table {
+	font-weight: bold;
+}

@@ -88,9 +88,12 @@ public class BibTex {
 
 		String bodyEnd = "</body></html>";
 
-		ArrayList<String> bodyContent = new ArrayList<String>();
+		String cssFile = "<link rel='stylesheet' type='text/css' href='main.css'>";
 
+		ArrayList<String> bodyContent = new ArrayList<String>();
+		
 		bodyContent.add(header);
+		bodyContent.add(cssFile);
 		bodyContent.add(bodyInit);
 
 
@@ -99,15 +102,22 @@ public class BibTex {
 		while (it.hasNext()) {
 	        Map.Entry classStructure = (Map.Entry)it.next();
 
-	        String classContent = "<div style='width: 200px; margin-bottom: 2em;'><div style='color: blue; margin-bottom: 1.5em;'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
-    		String idString = "<div style='border-radius: 7px;'><label style='color: #89BCDB;'>ID = </label>"  + ((String)classStructure.getKey()).split("-")[1] +  "<br><br></div>";
+	        String classContent = "<div class='class panel panel-default'><div class='panel-heading'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
+    		String idString = "<div class='panel-body'><label>ID = </label>"  + " "+ ((String)classStructure.getKey()).split("-")[1] +  "<br><br></div>";
     		
-    		String tableString = "<div><table style='border: 1px solid gray; padding: 0.4em; width: 300px;'><thead style='color: red;'><tr><td>Param</td><td class='value_table'>Value</td></tr></thead>";
-    		String tableBodyInitString = "<tbody style='border: 1px solid gray;'>";
+    		String tableString = "<div><table class='table'><thead class='table_header'><tr><td class='param'>Param</td><td class='value_table'>Value</td></tr></thead>";
+    		String tableBodyInitString = "<tbody>";
 
     		
     		String tableBodyEndString = "</tbody></table></div></div>";
 
+    		String includes = "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>"
+    						+ "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css'>"
+    						+ "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>"
+    						+ "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>";
+
+
+			bodyContent.add(includes);
     		bodyContent.add(classContent);
     		bodyContent.add(idString);
     		bodyContent.add(tableString);
@@ -118,7 +128,7 @@ public class BibTex {
 			while (classIterator.hasNext()) {
 	        	Map.Entry params = (Map.Entry) classIterator.next();
 
-	        	String tableRow = "<tr><td>" + params.getKey() + "</td><td class='value_table'>"+ params.getValue() +"</td></tr>";
+	        	String tableRow = "<tr><td>" + params.getKey() + "</td><td>"+ params.getValue() +"</td></tr>";
 
 
 	        	bodyContent.add(tableRow);
