@@ -11,6 +11,7 @@ jjtree.bat
 !Semantic.java
 !JsonSemanticParser.java
 !HtmlGenerator.java
+!APAGenerator.java
 !/org/*
 *.class
 bibtext2html.jj

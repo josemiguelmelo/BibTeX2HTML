@@ -41,7 +41,13 @@ public class HtmlGenerator{
 	{
 		java.io.PrintWriter htmlFile = new java.io.PrintWriter(outputFile, "UTF-8");
 
-		String header = "<html><head><title> " + outputFile.split("\\.")[0] + " </title></head>";
+		String includes = "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>"
+    						+ "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css'>"
+    						+ "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>"
+    						+ "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>";
+
+
+		String header = "<html><head><title> " + outputFile.split("\\.")[0] + " </title>" + includes + "</head>";
 
 		String bodyInit = "<body>";
 
@@ -64,21 +70,24 @@ public class HtmlGenerator{
 	        String classContent = "<div class='class panel panel-default'><div class='panel-heading'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
     		String idString = "<div class='panel-body'><label>ID = </label>"  + " "+ ((String)classStructure.getKey()).split("-")[1] +  "<br><br></div>";
     		
+
+    			/** current block hashmap **/
+    		HashMap<String , HashMap<String, String>> currentBlock = new  HashMap<String , HashMap<String, String>> ();
+            currentBlock.put((String)classStructure.getKey() , (HashMap<String, String>)classStructure.getValue());
+            // get html with current block representation
+    		String repres = new APAGenerator(currentBlock).getHtml();
+
+    		String representationString = "<div class='panel-body'><label>APA representation </label><br>" + repres + "<br><br></div>";
+
     		String tableString = "<div><table class='table'><thead class='table_header'><tr><td class='param'>Param</td><td class='value_table'>Value</td></tr></thead>";
     		String tableBodyInitString = "<tbody>";
 
     		
     		String tableBodyEndString = "</tbody></table></div></div>";
 
-    		String includes = "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>"
-    						+ "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css'>"
-    						+ "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>"
-    						+ "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>";
-
-
-			bodyContent.add(includes);
     		bodyContent.add(classContent);
     		bodyContent.add(idString);
+    		bodyContent.add(representationString);
     		bodyContent.add(tableString);
     		bodyContent.add(tableBodyInitString);
 
