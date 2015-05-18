@@ -10,6 +10,7 @@ jjtree.bat
 !SimpleNode.java
 !Semantic.java
 !JsonSemanticParser.java
+!HtmlGenerator.java
 !/org/*
 *.class
 bibtext2html.jj

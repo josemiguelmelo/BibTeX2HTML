@@ -22,26 +22,46 @@ public class BibTex {
 
 	private static String outputLocation;
 
+	private static String outputStyle;
 
-	private static String outputLocation(String outputLocation){
-		if(outputLocation.contains(".html"))
-			return outputLocation;
-		else
-			return outputLocation + ".html";
-	}
+	private static final String DEFAULT_STYLE = HtmlGenerator.APA_STYLE;
+
+	
 
 	public static void main(String args[]) throws ParseException {
+		/** Array with possible style values **/
+		ArrayList<String> possibleStyleValues = new ArrayList<String>();
+		possibleStyleValues.add(HtmlGenerator.APA_STYLE);
+		possibleStyleValues.add(HtmlGenerator.CHICAGO_STYLE);
+
+		/******************/
+
 
 		semantic = new Semantic();
 		nodeIds = new ArrayList<String>();
 		errorsFound = 0;
 
-		if(args.length != 2){
-			System.out.println("Arguments not valid.\njava BibTex <file_to_parse> <output_location>");
+		if(args.length < 2 || args.length > 3){
+			System.out.println("Arguments not valid.\njava BibTex <file_to_parse> <output_location> [output_style]\n\n\tArgument\tPossible value\t\tDefault\n\toutput_style\t[apa | chicago] \t[apa]");
 			return;
 		}
+
+		/** get arguments from command **/
 		fileToParse = args[0];
-		outputLocation = outputLocation(args[1]);
+		outputLocation = args[1];
+
+		if(args.length == 3){
+			System.out.println(args[2]);
+			if(!existsInArray(possibleStyleValues, args[2])){
+				System.out.println("Arguments not valid.\njava BibTex <file_to_parse> <output_location> [output_style]\n\n\tArgument\tPossible value\t\tDefault\n\toutput_style\t[apa | chicago] \t[apa]");
+				return;
+			}
+			outputStyle = args[2];
+		}else{
+			outputStyle = DEFAULT_STYLE;
+		}
+
+		/********************************/
 
 
 		java.io.FileInputStream file;
@@ -74,78 +94,23 @@ public class BibTex {
 		System.out.println("\nParse Finished.\nNumber of errors found: "+ errorsFound);
 	}
 
-	public void generateIntermediateRepresentation(){
-		representation = semantic.representation;
+	public static boolean existsInArray(ArrayList<String> list, String value){
+		for( String style : list){
+			if(value.equals(style))
+				return true;
+		}
+		return false;
 	}
 
-	public void generateHTML() throws Exception
-	{
-		java.io.PrintWriter htmlFile = new java.io.PrintWriter(outputLocation, "UTF-8");
-
-		String header = "<html><head><title> " + fileToParse.split("\\.")[0] + " </title></head>";
-
-		String bodyInit = "<body>";
-
-		String bodyEnd = "</body></html>";
-
-		String cssFile = "<link rel='stylesheet' type='text/css' href='main.css'>";
-
-		ArrayList<String> bodyContent = new ArrayList<String>();
-		
-		bodyContent.add(header);
-		bodyContent.add(cssFile);
-		bodyContent.add(bodyInit);
+	public void generateHTML() throws Exception{
+		HtmlGenerator generator = new HtmlGenerator(outputLocation, representation, outputStyle);
+		generator.generate();
+	}
+	
 
 
-		Iterator it = representation.entrySet().iterator();
-
-		while (it.hasNext()) {
-	        Map.Entry classStructure = (Map.Entry)it.next();
-
-	        String classContent = "<div class='class panel panel-default'><div class='panel-heading'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
-    		String idString = "<div class='panel-body'><label>ID = </label>"  + " "+ ((String)classStructure.getKey()).split("-")[1] +  "<br><br></div>";
-    		
-    		String tableString = "<div><table class='table'><thead class='table_header'><tr><td class='param'>Param</td><td class='value_table'>Value</td></tr></thead>";
-    		String tableBodyInitString = "<tbody>";
-
-    		
-    		String tableBodyEndString = "</tbody></table></div></div>";
-
-    		String includes = "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>"
-    						+ "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css'>"
-    						+ "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>"
-    						+ "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>";
-
-
-			bodyContent.add(includes);
-    		bodyContent.add(classContent);
-    		bodyContent.add(idString);
-    		bodyContent.add(tableString);
-    		bodyContent.add(tableBodyInitString);
-
-			Iterator classIterator = ((HashMap<String, String>)classStructure.getValue()).entrySet().iterator();
-
-			while (classIterator.hasNext()) {
-	        	Map.Entry params = (Map.Entry) classIterator.next();
-
-	        	String tableRow = "<tr><td>" + params.getKey() + "</td><td>"+ params.getValue() +"</td></tr>";
-
-
-	        	bodyContent.add(tableRow);
-    		
-	    	}
-
-	    	bodyContent.add(tableBodyEndString);
-
-	    }
-
-	    bodyContent.add(bodyEnd);
-
-	    for(int i = 0; i < bodyContent.size(); i++){
-			htmlFile.println(bodyContent.get(i));	
-	    }
-
-		htmlFile.close();
+	public void generateIntermediateRepresentation(){
+		representation = semantic.representation;
 	}
 
 
