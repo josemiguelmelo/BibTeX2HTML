@@ -51,7 +51,6 @@ public class BibTex {
 		outputLocation = args[1];
 
 		if(args.length == 3){
-			System.out.println(args[2]);
 			if(!existsInArray(possibleStyleValues, args[2])){
 				System.out.println("Arguments not valid.\njava BibTex <file_to_parse> <output_location> [output_style]\n\n\tArgument\tPossible value\t\tDefault\n\toutput_style\t[apa | chicago] \t[apa]");
 				return;
@@ -325,9 +324,9 @@ TOKEN :
 
 TOKEN :
 {
-	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>|<SPECIAL_CHAR>)+ <QUOTE>) 
+	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z", " ", "-"]| <DIGITS>|<SPECIAL_CHAR> | <COMMA>)+ <QUOTE>) 
 		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIAL_CHAR>)+
-		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z"," ", "-"]|<DIGITS>|<SPECIAL_CHAR>)+ <CLOSE_BRACKET>))>
+		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z", " ", "-"]|<DIGITS>|<SPECIAL_CHAR> | <COMMA>)+ <CLOSE_BRACKET>))>
 }
 
 SimpleNode Start() : {}
