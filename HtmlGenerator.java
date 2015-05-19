@@ -136,6 +136,8 @@ public class HtmlGenerator{
 		current = current.replace("\\”{a}","&auml");
 		current = current.replace("\\^{a}","&acirc");
 		current = current.replace("\\ʼ{a}","&aacute");
+		current = current.replace("\\.{a}",""); // add . on top of the char
+		
 		return current;
 	}
 }

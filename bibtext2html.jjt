@@ -307,7 +307,6 @@ TOKEN :
 			| "\u0048" | "\u0064" | "\u2019" | "\u007E" | "\u0075" | "\u0062" | "\u005E" 
 			| "\u003D" | "\u0076" | "\u0063" | "\u0027") 
 		<OPEN_BRACKET>["a"-"z","A"-"Z"] <CLOSE_BRACKET> )
-		
 		| ("\\" "\u0074" <OPEN_BRACKET> ["a"-"z","A"-"Z"]["a"-"z","A"-"Z"]<CLOSE_BRACKET>)) >
 }
 
