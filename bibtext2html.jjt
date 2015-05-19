@@ -303,15 +303,12 @@ TOKEN :
 	< VOLUME : "volume" > |
 	< DIGITS : (["0" - "9"])+ > |
 	< SPECIFIC_CHAR : ( 
-		("\\" ("\u2018" | "\u201D" | "\u002E" | "\u0048" | "\u0064" | "\u2019" | "\u007E" | "\u0075" | "\u0062" | "\u005E" | "\u003D" | "\u0076" | "\u0063" | "\u0027") ["a"-"z","A"-"Z"])
-		| ("\\" ("\u2018" | "\u201D" | "\u002E" | "\u0048" | "\u0064" | "\u2019" | "\u007E" | "\u0075" | "\u0062" | "\u005E" | "\u003D" | "\u0076" | "\u0063" ) 
-			<OPEN_BRACKET>["a"-"z","A"-"Z"]<CLOSE_BRACKET> ) 
+		( "\\" ("\u02BB" | "\u02BC" | "\u2018" | "\u201D" | "\u002E" 
+			| "\u0048" | "\u0064" | "\u2019" | "\u007E" | "\u0075" | "\u0062" | "\u005E" 
+			| "\u003D" | "\u0076" | "\u0063" | "\u0027") 
+		<OPEN_BRACKET>["a"-"z","A"-"Z"] <CLOSE_BRACKET> )
+		
 		| ("\\" "\u0074" <OPEN_BRACKET> ["a"-"z","A"-"Z"]["a"-"z","A"-"Z"]<CLOSE_BRACKET>)) >
-}
-
-TOKEN : 
-{
-	< SPECIAL_CHAR : <OPEN_BRACKET> <SPECIFIC_CHAR> <CLOSE_BRACKET> >
 }
 
 TOKEN :
@@ -327,9 +324,9 @@ TOKEN :
 
 TOKEN :
 {
-	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z", " ", "-"]| <DIGITS>|<SPECIAL_CHAR> | <COMMA>)+ <QUOTE>) 
-		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIAL_CHAR>)+
-		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z", " ", "-"]|<DIGITS>|<SPECIAL_CHAR> | <COMMA>)+ <CLOSE_BRACKET>))>
+	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z", " ", "-"]| <DIGITS>|<SPECIFIC_CHAR> | <COMMA>)+ <QUOTE>) 
+		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIFIC_CHAR>)+
+		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z", " ", "-"]|<DIGITS>|<SPECIFIC_CHAR> | <COMMA>)+ <CLOSE_BRACKET>))>
 }
 
 SimpleNode Start() : {}

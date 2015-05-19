@@ -117,6 +117,36 @@ public class HtmlGenerator{
 	}
 
 	public String cleanLatex(String dirtyString) {
-		return dirtyString.replace("{\\~a}","&atilde");
+		String finalString="";
+
+		//add flexibility to clean functions, currently only working for "a"
+		String accented = cleanLatexAccent(dirtyString);
+		//add more clean specials chars from bibtex here
+
+
+
+
+		finalString = accented;
+		return finalString;
+	}
+
+	public String cleanLatexAccent(String dirtyString) {
+		String current = dirtyString.replace("\\~{a}","&atilde");	
+		current = current.replace("\\ʻ{a}","&agrave");
+		current = current.replace("\\”{a}","&auml");
+		current = current.replace("\\^{a}","&acirc");
+		current = current.replace("\\ʼ{a}","&aacute");
+		return current;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
