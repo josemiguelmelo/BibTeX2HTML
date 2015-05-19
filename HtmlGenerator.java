@@ -77,7 +77,7 @@ public class HtmlGenerator{
             // get html with current block representation
     		String repres = new APAGenerator(currentBlock).getHtml();
 
-    		String representationString = "<div class='panel-body'><label>APA representation </label><br>" + repres + "<br><br></div>";
+    		String representationString = "<div class='panel-body'><label>APA representation </label><br>" + cleanLatex(repres) + "<br><br></div>";
 
     		String tableString = "<div><table class='table'><thead class='table_header'><tr><td class='param'>Param</td><td class='value_table'>Value</td></tr></thead>";
     		String tableBodyInitString = "<tbody>";
@@ -116,4 +116,7 @@ public class HtmlGenerator{
 		htmlFile.close();
 	}
 
+	public String cleanLatex(String dirtyString) {
+		return dirtyString.replace("{\\~a}","&atilde");
+	}
 }
