@@ -3,6 +3,10 @@ import java.util.*;
 
 import java.io.*;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+
 
 public class HtmlGenerator{
 
@@ -107,8 +111,6 @@ public class HtmlGenerator{
 		htmlFile.close();
 	}
 
-	
-
 	public String cleanLatex(String dirtyString) {
 		String finalString="";
 
@@ -123,13 +125,19 @@ public class HtmlGenerator{
 
 	public String cleanLatexAccent(String dirtyString) {
 		String current = dirtyString;
-		current = current.replace("\\~{a}","&atilde");	
-		current = current.replace("\\ʻ{a}","&agrave");
-		current = current.replace("\\”{a}","&auml");
-		current = current.replace("\\^{a}","&acirc");
-		current = current.replace("\\ʼ{a}","&aacute");
-		current = current.replace("\\.{a}",""); // add . on top of the char
-
+		Pattern MY_PATTERN = Pattern.compile("\\{[a-z]\\}");
+		Matcher m = MY_PATTERN.matcher(current);
+		while (m.find()) {
+			String s = m.group(0);
+			System.out.println("string to change is: " + s.charAt(1));
+			current = current.replace("\\~{"+s.charAt(1)+"}","&"+s.charAt(1)+"tilde");	
+			current = current.replace("\\ʻ{"+s.charAt(1)+"}","&"+s.charAt(1)+"grave");
+			current = current.replace("\\”{"+s.charAt(1)+"}","&"+s.charAt(1)+"uml");
+			current = current.replace("\\^{"+s.charAt(1)+"}","&"+s.charAt(1)+"circ");
+			current = current.replace("\\ʼ{"+s.charAt(1)+"}","&"+s.charAt(1)+"acute");
+			current = current.replace("\\.{a}","");
+			current = current.replace("\\c{"+s.charAt(1)+"}","&"+s.charAt(1)+"cedil");
+		}		
 		return current;
 	}
 
@@ -138,7 +146,6 @@ public class HtmlGenerator{
 		current = current.replace("\\aa","&aring");
 		current = current.replace("\\ae","&aelig");
 		current = current.replace("\\0","&oslash");
-		current = current.replace("\\c{c}","&ccedil");
 		current = current.replace("\\ss","&szlig");
 
 
