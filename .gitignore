@@ -16,3 +16,4 @@ jjtree.bat
 *.class
 bibtext2html.jj
 *.html
+!/templates/*
