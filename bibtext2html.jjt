@@ -102,7 +102,7 @@ public class BibTex {
 	}
 
 	public void generateHTML() throws Exception{
-		HtmlGenerator generator = new HtmlGenerator(outputLocation, representation, outputStyle);
+		HtmlGenerator generator = new HtmlGenerator(outputLocation, "templates/template.html",representation, outputStyle);
 		generator.generate();
 	}
 	

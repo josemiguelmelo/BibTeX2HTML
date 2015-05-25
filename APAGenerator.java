@@ -1,20 +1,43 @@
 import java.util.*;
 
-import java.io.IOException;
+import java.io.*;
+
 
 
 public class APAGenerator{
 
 	private HashMap<String , HashMap<String, String>> representation;
 
+	private final String APA_TEMPLATE_FILE = "templates/APA_template.html"; 
+
 	public APAGenerator(HashMap<String , HashMap<String, String>> representation){
 		this.representation = representation;
 	}
 
-	String getHtml(){
+	private String loadTemplate() throws Exception{
 
-		ArrayList<String> bodyContent = new ArrayList<String>();
-		
+	  	BufferedReader bufferedReader = new BufferedReader(new FileReader(APA_TEMPLATE_FILE));
+	 
+	  	StringBuffer stringBuffer = new StringBuffer();
+	  	String line = null;
+	 
+	  	while((line =bufferedReader.readLine())!=null){
+	 
+	   		stringBuffer.append(line).append("\n");
+  		}
+   
+  		return stringBuffer.toString();
+	}
+
+
+	String getHtml(){
+		String template = "";
+		try{
+			template = loadTemplate();
+		}catch(Exception e){
+			System.out.println("Error: Could not load APA template.");
+			return "";
+		}
 
 		Iterator it = representation.entrySet().iterator();
 
@@ -52,29 +75,59 @@ public class APAGenerator{
 		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
 		        }
 	        }
+
+	        if(struc.get("editor") != null){
+	        	String[] authors = struc.get("editor").split(" and ");
+
+		        int i;
+		        for(i = 0; i < authors.length - 1; i++){
+		        	String[] authorString = authors[i].split(",");
+		        	if(authorString.length == 1)
+		        		line = line + authorString[0] + ", ";
+		        	else
+		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
+		        }
+
+
+
+
+		        if(authors[i].equals("others")){
+		        	line = line + "...";
+		        }else{
+		        	String[] authorString = authors[i].split(", ");
+		        	if(authorString.length == 1)
+						line = line + authorString[0] + ", ";
+		        	else
+		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
+		        }
+	        }
+
+	        template = template.replace("{{ AUTHOR }}", line);
+	        line = "";
 	        
 
 	        if(struc.get("year") != null)
 	        	line = line + "(" + struc.get("year") + "). ";
 
+
+	        template = template.replace("{{ YEAR }}", line);
+	        line="";
+
+
 			if(struc.get("title") != null)
 	        	line = line + struc.get("title") + ". ";
+
+
+	        template = template.replace("{{ TITLE }}", line);
+	        line="";
 
 			if(struc.get("publisher") != null)
 	        	line = line + struc.get("publisher")+ ".";
 
-
-	    	bodyContent.add(line + "<br>");
-
+	        template = template.replace("{{ PUBLISHER }}", line);
+	        line="";
 	    }
 
-
-	    String htmlFile = "";
-	    for(int i = 0; i < bodyContent.size(); i++){
-			htmlFile += bodyContent.get(i);	
-	    }
-
-
-	    return htmlFile;
+	    return template;
 	}
 }
