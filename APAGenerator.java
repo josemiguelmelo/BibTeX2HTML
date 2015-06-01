@@ -8,7 +8,7 @@ public class APAGenerator{
 
 	private HashMap<String , HashMap<String, String>> representation;
 
-	private final String APA_TEMPLATE_FILE = "templates/APA_template.html"; 
+	private final String APA_TEMPLATE_FILE = "templates/APA/APA_template.html"; 
 
 	public APAGenerator(HashMap<String , HashMap<String, String>> representation){
 		this.representation = representation;
