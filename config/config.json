@@ -7,7 +7,6 @@
 
         "optional" : [
             "number", "pages", "month", "note", "key"
-
         ] 
            
     },
@@ -19,8 +18,8 @@
         ],
 
         "optional" : [
-            "volume/number", "series", "address", "month", "note" ,"key"
 
+            "volume/number", "series", "address", "month", "note" ,"key","edition","chapter"
         ] 
            
     },
@@ -136,7 +135,7 @@
         ],
 
         "optional" : [
-            "type", "address", "month", "note", "key"
+            "type", "address", "month", "note", "key","institution"
 
         ]
            
