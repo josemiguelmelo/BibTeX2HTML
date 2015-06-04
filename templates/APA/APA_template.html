@@ -7,7 +7,7 @@
 	.apa_title{
 		color: green;
 	}
-	.title{
+	.italic{
 		font-style: italic;
 	}
 </style>
@@ -19,8 +19,24 @@
 </div>
 
 <div class="apa_style">
-	<span class="author"> {{ AUTHOR }}</span>
-	<span class=""> {{ YEAR }} </span>
-	<span class="title"> {{ TITLE }}</span>
-	<span class=""> {{ PUBLISHER }} </span>
+	<span class="author"> {{ AUTHOR }} {{ ORGANIZATION }}</span>
+	<span> ({{ YEAR }}{{ MONTH }}) </span>
+	<span> {{ CHAPTER }} </span>
+	<span class="italic"> {{ TITLE }}</span>
+	<span> {{ VOLUME }} </span>
+	<span> {{ NUMBER }} </span>
+	<span> {{ TYPE }} </span>
+	<span> {{ BOOKTITLE }} </span>
+	<span class="italic"> {{ JOURNAL }} </span>
+	<span> {{ HOWPUBLISHED }} </span>
+	<span> {{ INSTITUTION }} {{ SCHOOL }}</span>
+	<span> {{ EDITION }} {{ SERIES }} {{ PAGES }} </span>
+	<span> {{ EDITOR }} </span>
+	<span> {{ ADDRESS }} </span>
+	<span> {{ PUBLISHER }} </span>
+	<span> {{ NOTE }} </span>
+	<span> {{ ANNOTE }} </span>
+	<span> {{ CROSSREF }} </span>
+	<span> {{ KEY }} </span>
 </div>
+

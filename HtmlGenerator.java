@@ -74,15 +74,18 @@ public class HtmlGenerator{
 	        Map.Entry classStructure = (Map.Entry)it.next();
 
 	        bodyContent += "<div class='class panel panel-default'><div class='panel-heading'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
-    		bodyContent += "<div class='panel-body'><label>ID = </label>"  + " "+ ((String)classStructure.getKey()).split("-")[1] +  "<br><br></div>";
+    		bodyContent += "<div class='panel-body'><label>ID = </label>"  + " "+ ((String)classStructure.getKey()).split("-")[1] +  "</div>";
 
     			/** current block hashmap **/
     		HashMap<String , HashMap<String, String>> currentBlock = new  HashMap<String , HashMap<String, String>> ();
             currentBlock.put((String)classStructure.getKey() , (HashMap<String, String>)classStructure.getValue());
             // get html with current block representation
     		String repres = new APAGenerator(currentBlock).getHtml();
+    		String chicagoRep = new ChicagoGenerator(currentBlock).getHtml();
 			
-			bodyContent += "<div class='panel-body'>" + cleanLatex(repres) + "<br><br></div>";
+			bodyContent += "<div class='panel-body'>" + cleanLatex(repres) + "</div>";
+			bodyContent += "<div class='panel-body'>" + cleanLatex(chicagoRep) + "<br><br></div>";
+
 
     		bodyContent += "<div><table class='table'><thead class='table_header'><tr><td class='param'>Param</td><td class='value_table'>Value</td></tr></thead>";
     		bodyContent += "<tbody>";
@@ -129,7 +132,6 @@ public class HtmlGenerator{
 		Matcher m = MY_PATTERN.matcher(current);
 		while (m.find()) {
 			String s = m.group(0);
-			System.out.println("string to change is: " + s.charAt(1));
 			current = current.replace("\\~{"+s.charAt(1)+"}","&"+s.charAt(1)+"tilde");	
 			current = current.replace("\\ʻ{"+s.charAt(1)+"}","&"+s.charAt(1)+"grave");
 			current = current.replace("\\”{"+s.charAt(1)+"}","&"+s.charAt(1)+"uml");

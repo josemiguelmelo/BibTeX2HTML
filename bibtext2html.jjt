@@ -315,7 +315,7 @@ TOKEN :
 
 TOKEN :
 {
-	< PAGESINPUT : <QUOTE> <DIGITS>(("-"|"--")<DIGITS>)? <QUOTE> >
+	< PAGESINPUT : (<QUOTE> <DIGITS>(("-"|"--")<DIGITS>)? <QUOTE>)  >
 }
 
 TOKEN :
@@ -327,7 +327,7 @@ TOKEN :
 TOKEN :
 {
 	< STRING : (( <QUOTE> (["a"-"z", "A"-"Z", " ", "-"]| <DIGITS>|<SPECIFIC_CHAR> | <COMMA>)+ <QUOTE>) 
-		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIFIC_CHAR>)+
+		| (["a"-"z", "A"-"Z", "-"]|<DIGITS>|<SPECIFIC_CHAR>|":")+
 		| ( <OPEN_BRACKET> (["a"-"z", "A"-"Z", " ", "-"]|<DIGITS>|<SPECIFIC_CHAR> | <COMMA>)+ <CLOSE_BRACKET>))>
 }
 
@@ -385,7 +385,7 @@ void Pages():{Token input;}
 
 void Month():{Token input;}
 {
-	<MONTH> <EQUAL> input = <STRING>
+	<MONTH> <EQUAL> input = <DIGITS>
 	{jjtThis.paramName = "month";}
 	{jjtThis.value = input.image;}
 	{jjtThis.lineNumber = input.beginLine;}
@@ -445,7 +445,7 @@ void Address():{Token input;}
 
 void Series():{Token input;}
 {
-	<SERIES> <EQUAL> input = <STRING>
+	<SERIES> <EQUAL> input = <DIGITS>
 	{jjtThis.paramName = "series";}
 	{jjtThis.value = input.image;}
 	{jjtThis.lineNumber = input.beginLine;}
@@ -541,7 +541,7 @@ void School():{Token input;}
 
 void Volume():{Token input;}
 {
-    <VOLUME> <EQUAL> input = <STRING>
+    <VOLUME> <EQUAL> input = <DIGITS>
 	{jjtThis.paramName = "volume";}
 	{jjtThis.value = input.image;}
 	{jjtThis.lineNumber = input.beginLine;}

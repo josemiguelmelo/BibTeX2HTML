@@ -62,9 +62,6 @@ public class APAGenerator{
 		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
 		        }
 
-
-
-
 		        if(authors[i].equals("others")){
 		        	line = line + "...";
 		        }else{
@@ -88,9 +85,6 @@ public class APAGenerator{
 		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
 		        }
 
-
-
-
 		        if(authors[i].equals("others")){
 		        	line = line + "...";
 		        }else{
@@ -106,11 +100,15 @@ public class APAGenerator{
 	        line = "";
 	        
 
-	        if(struc.get("year") != null)
-	        	line = line + "(" + struc.get("year") + "). ";
 
-
+			if(struc.get("year") != null)
+	        	line = line + struc.get("year");
 	        template = template.replace("{{ YEAR }}", line);
+	        line="";
+
+	        if(struc.get("month") != null && struc.get("year") != null)
+	        	line = line + " - " + struc.get("month");
+	        template = template.replace("{{ MONTH }}", line);
 	        line="";
 
 
@@ -126,6 +124,103 @@ public class APAGenerator{
 
 	        template = template.replace("{{ PUBLISHER }}", line);
 	        line="";
+
+
+	        if(struc.get("chapter") != null)
+	        	line = line + struc.get("chapter") + ". In";
+	        template = template.replace("{{ CHAPTER }}",line);
+	        line="";
+
+	        if(struc.get("editor") != null) 
+	        	line = line + "(" + struc.get("editor") + ", Eds.).";
+	        template = template.replace("{{ EDITOR }}",line);
+	        line="";
+
+	        if(struc.get("edition") != null)
+	        	line = line + struc.get("edition") + " ed. . ";
+	        template = template.replace("{{ EDITION }}",line);
+	        line="";
+
+	        if(struc.get("volume") != null)
+	        	line = line + struc.get("volume") + " ";
+	        template = template.replace("{{ VOLUME }}",line);
+	        line="";
+
+	        if(struc.get("pages") != null)
+	        	line = line + "pp. " + struc.get("pages") + ". ";
+	        template = template.replace("{{ PAGES }}",line);
+	        line="";
+
+	        if(struc.get("number") != null)
+	        	line = line + "(" + struc.get("number") + ") ";
+	        template = template.replace("{{ NUMBER }}",line);
+	        line="";
+
+	        if(struc.get("howpublished") != null)
+	        	line = line + "(" + struc.get("howpublished") + "). ";
+	        template = template.replace("{{ HOWPUBLISHED }}",line);
+	        line="";
+
+	        if(struc.get("school") != null)
+	        	line = line + struc.get("school") + ". ";
+	        template = template.replace("{{ SCHOOL }}",line);
+	        line="";
+
+	        if(struc.get("organization") != null)
+	        	line = line + struc.get("organization") + ". ";
+	        template = template.replace("{{ ORGANIZATION }}",line);
+	        line="";
+
+	        if(struc.get("institution") != null)
+	        	line = line + struc.get("institution") + ". ";
+	        template = template.replace("{{ INSTITUTION }}",line);
+	        line="";
+
+	        if(struc.get("journal") != null)
+	        	line = line + struc.get("journal") + ". ";
+	        template = template.replace("{{ JOURNAL }}",line);
+	        line="";
+
+	        if(struc.get("booktitle") != null)
+	        	line = line + struc.get("booktitle") + ". ";
+	        template = template.replace("{{ BOOKTITLE }}",line);
+	        line="";
+
+	        if(struc.get("series") != null)
+	        	line = line + "series:" + struc.get("series") + ". ";
+	        template = template.replace("{{ SERIES }}",line);
+	        line="";
+
+			if(struc.get("address") != null)
+	        	line = line + struc.get("address") + ". ";
+	        template = template.replace("{{ ADDRESS }}",line);
+	        line="";
+
+	        if(struc.get("note") != null)
+	        	line = line + struc.get("note");
+	        template = template.replace("{{ NOTE }}",line);
+	        line="";
+
+	        if(struc.get("annote") != null)
+	        	line = line + "<br>" + struc.get("annote");
+	        template = template.replace("{{ ANNOTE }}",line);
+	        line="";
+
+	        if(struc.get("type") != null)
+	        	line = line + struc.get("type") + ".";
+	        template = template.replace("{{ TYPE }}",line);
+	        line="";
+
+	        if(struc.get("crossref") != null)
+	        	line = line + "ref to." + struc.get("crossref") + ".";
+	        template = template.replace("{{ CROSSREF }}",line);
+	        line="";
+
+	         if(struc.get("key") != null)
+	        	line = line + "inkey=" + struc.get("key") + ".";
+	        template = template.replace("{{ KEY }}",line);
+	        line="";
+
 	    }
 
 	    return template;
