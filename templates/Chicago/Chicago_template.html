@@ -1,0 +1,44 @@
+<style>
+	.chicago_style{
+		border: solid 1px black;
+		border-radius: 10px;
+		padding: 1em;
+	}
+	.chicago_title{
+		color: green;
+	}
+	.italic{
+		font-style: italic;
+	}
+	.notes{
+		font-size: 10px;
+	}
+</style>
+
+<div>
+	<h3 class="chicago_title">
+		Chicago representation
+	</h3>
+</div>
+
+<!-- http://www.chicagomanualofstyle.org/tools_citationguide.html -->
+
+<div class="chicago_style">
+	<span class=""> {{ AUTHOR }} </span>
+	<span class=""> {{ CHAPTER }} </span>
+	<span class=""> {{ TITLE }} </span>
+	<span class=""> {{ EDITOR }} </span>
+	<span class=" italic"> {{ JOURNAL }} </span>
+	<span class=""> {{ VOLUME }} </span>
+	<span class=""> {{ NUMBER }} </span>
+	<span class=""> {{ ADDRESS }} </span>
+	<span class=""> {{ PUBLISHER }} </span>
+	<span class=""> {{ INSTITUTION }} </span>
+	<span class=""> {{ MONTH }} </span>
+	<span class=""> {{ YEAR }} </span>
+	<span class> {{ EDITION }} </span>
+	<span class=""> {{ PAGES }} </span>
+	<span class="notes"> {{ NOTE }} </span>
+	<span class=""> {{ ANNOTE }} </span>
+	<span class=""> {{ CROSSREF }} </span>
+</div>
