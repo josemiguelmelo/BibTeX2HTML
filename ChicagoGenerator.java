@@ -58,6 +58,10 @@ public class ChicagoGenerator{
 	        template = template.replace("{{ AUTHOR }}", line);
 	        line="";
 
+
+	        
+	        
+
 	        if(struc.get("chapter") != null)
 	        	line = line + "\"" +struc.get("chapter") + "\", in";
 	        template = template.replace("{{ CHAPTER }}", line);
