@@ -663,7 +663,7 @@ void Params(): {}
 }
 
 JAVACODE
-void ErrorSkipLine(Token id) {
+void ErrorSkipLine() {
 	Token t;
 	t = getToken(0);
 
@@ -677,7 +677,12 @@ void ErrorSkipLine(Token id) {
 void Language() : {Token id;}
 {
 	{ jjtThis.paramName = "language"; }
-	Class()
+	try{
+		Class() 
+	}catch(Exception e){
+		
+		return;
+	}
 	<OPEN_BRACKET>
 	id = <STRING>
 
@@ -687,7 +692,7 @@ void Language() : {Token id;}
 	try{
 		Body() 
 	}catch(Exception e){
-		ErrorSkipLine(id);
+		ErrorSkipLine();
 	}
 	<CLOSE_BRACKET>
 }

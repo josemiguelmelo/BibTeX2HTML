@@ -53,14 +53,43 @@ public class ChicagoGenerator{
 
 	        HashMap<String, String> struc = ((HashMap<String, String>)classStructure.getValue());
 
-	        if(struc.get("author") != null)
-	        	line = line + struc.get("author") + ", ";
-	        template = template.replace("{{ AUTHOR }}", line);
-	        line="";
+	    
+	        if(struc.get("author")!= null) {
+	        	String[] authors = null;
 
+	        	if(struc.get("author").toLowerCase().contains("and".toLowerCase())) {
+					authors = struc.get("author").split("and");
+					for(int i=0;i<authors.length;i++) {
+						String[] currentAuthor = authors[i].split(",");
+						String correctAuthor = currentAuthor[1] + currentAuthor[0];
+						authors[i] = correctAuthor;
+					}
+	        	} else {
+	        		authors = struc.get("author").split(",");
+	        	}
 
-	        
-	        
+	        	if(authors.length == 1) {
+	        		String[] correctRepresentation = authors[0].split(" ",2);
+	        		line = line + correctRepresentation[1] + ", " + correctRepresentation[0] + ".";
+	        		template = template.replace("{{ AUTHOR }}",line);
+	        		line="";
+	        	} else if(authors.length > 1 && authors.length < 4) {
+	        		String[] correctRepresentation = authors[0].split(" ",2);
+	        		line = line + correctRepresentation[1] + "," + correctRepresentation[0];
+	        		if(authors.length==2) {
+	        			line = line + " and " + authors[1] + ".";
+	        		}else if(authors.length==3){
+	        			line = line +" and " + authors[1] + " and " + authors[2] + ".";
+	        		}
+	        		template = template.replace("{{ AUTHOR }}",line);
+	        		line="";
+	        	} else if(authors.length >= 4) {
+	        		String[] correctRepresentation = authors[0].split(" ",2);
+	        		line = line + correctRepresentation[1] + ", " + correctRepresentation[0] + " et al.";
+	        		template = template.replace("{{ AUTHOR }}",line);
+	        		line="";
+	        	}
+	        }
 
 	        if(struc.get("chapter") != null)
 	        	line = line + "\"" +struc.get("chapter") + "\", in";
