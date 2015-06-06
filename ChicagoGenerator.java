@@ -70,12 +70,22 @@ public class ChicagoGenerator{
 
 	        	if(authors.length == 1) {
 	        		String[] correctRepresentation = authors[0].split(" ",2);
-	        		line = line + correctRepresentation[1] + ", " + correctRepresentation[0] + ".";
+
+	        		if(correctRepresentation.length==2) {
+	        			line = line + correctRepresentation[1] + ", " + correctRepresentation[0] + ".";
+	        		} else {
+	        			line = line + correctRepresentation[0] +".";
+	        		}
 	        		template = template.replace("{{ AUTHOR }}",line);
 	        		line="";
 	        	} else if(authors.length > 1 && authors.length < 4) {
 	        		String[] correctRepresentation = authors[0].split(" ",2);
-	        		line = line + correctRepresentation[1] + "," + correctRepresentation[0];
+	        		if(correctRepresentation.length==2) {
+	        			line = line + correctRepresentation[1] + "," + correctRepresentation[0];
+	        		} else {
+	        			line = line + correctRepresentation[0];
+	        		}
+	        	 
 	        		if(authors.length==2) {
 	        			line = line + " and " + authors[1] + ".";
 	        		}else if(authors.length==3){
@@ -85,7 +95,13 @@ public class ChicagoGenerator{
 	        		line="";
 	        	} else if(authors.length >= 4) {
 	        		String[] correctRepresentation = authors[0].split(" ",2);
-	        		line = line + correctRepresentation[1] + ", " + correctRepresentation[0] + " et al.";
+	        		if(correctRepresentation.length==2) {
+	        			line = line + correctRepresentation[1] + ", " + correctRepresentation[0] + " et al.";
+	        		}
+	        		else {
+	        			line = line + correctRepresentation[0]+" et al.";
+	        		}
+
 	        		template = template.replace("{{ AUTHOR }}",line);
 	        		line="";
 	        	}
