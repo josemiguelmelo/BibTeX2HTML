@@ -51,26 +51,118 @@ public class APAGenerator{
 	        HashMap<String, String> struc = ((HashMap<String, String>)classStructure.getValue());
 
 	        if(struc.get("author") != null){
-	        	String[] authors = struc.get("author").split(" and ");
+	        	String[] authors = null;
 
-		        int i;
-		        for(i = 0; i < authors.length - 1; i++){
-		        	String[] authorString = authors[i].split(",");
-		        	if(authorString.length == 1)
-		        		line = line + authorString[0] + ", ";
-		        	else
-		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
-		        }
+	        	if(struc.get("author").toLowerCase().contains("and".toLowerCase())) {
+					authors = struc.get("author").split("and");
+					for(int i=0;i<authors.length;i++) {
+						String[] currentAuthor = authors[i].split(",");
+						String correctAuthor = currentAuthor[1] + currentAuthor[0];
+						authors[i] = correctAuthor;
+					}
+	        	} else {
+	        		authors = struc.get("author").split(",");
+	        	}
 
-		        if(authors[i].equals("others")){
-		        	line = line + "...";
-		        }else{
-		        	String[] authorString = authors[i].split(", ");
-		        	if(authorString.length == 1)
-						line = line + authorString[0] + ", ";
-		        	else
-		        		line = line + authorString[1].charAt(0) + ", " + authorString[0] + ", ";
-		        }
+	        	if(authors.length == 1) {
+	        		String[] correctRepresentation = authors[0].split(" ");
+
+	        		if(correctRepresentation.length == 1) {
+	        			line = line + correctRepresentation[0] +".";
+	        		}
+	        		else {
+	        			line += correctRepresentation[correctRepresentation.length-1] + ", ";
+
+	        			for(int i = 0; i < (correctRepresentation.length)-1; i++) {
+        					line += correctRepresentation[i].toUpperCase().charAt(0) + ".";
+        					if(i < correctRepresentation.length-2) {
+        						line += " ";
+        					}
+	        				
+	        			}
+	        		}
+
+	        		template = template.replace("{{ AUTHOR }}",line);
+	        		line="";
+	        	} else if(authors.length > 1 && authors.length < 8) {
+
+	        		for(int i = 0; i < authors.length; i++) {
+
+	        			authors[i] = authors[i].replaceAll("  ", " ");
+	        			if(Character.toString(authors[i].charAt(0)).equals(" "))
+	        				authors[i] = authors[i].substring(1);
+
+
+	        			String[] correctRepresentation = authors[i].split(" ");
+
+		        		if(correctRepresentation.length == 1) {
+		        			line = line + correctRepresentation[0] + ".";
+		        		}
+		        		else {
+		        			line += correctRepresentation[correctRepresentation.length-1] + ", ";
+
+		        			for(int j = 0; j < (correctRepresentation.length)-1; j++) {
+		    					line += correctRepresentation[j].toUpperCase().charAt(0) + ".";
+		    					if(j < correctRepresentation.length-2) {
+		    						line += " ";
+		    					}
+		        				
+		        			}
+		        		}
+
+		        		if(i < authors.length-2) {
+		        			line += ", ";
+		        		}
+		        		else if(i < authors.length-1) {
+		        			line += ", & ";
+		        		}
+	        		}
+
+	        		template = template.replace("{{ AUTHOR }}",line);
+	        		line="";
+
+	        	} else if(authors.length > 7) {
+	        		for(int i = 0; i < authors.length; i++) {
+
+	        			authors[i] = authors[i].replaceAll("  ", " ");
+	        			if(Character.toString(authors[i].charAt(0)).equals(" "))
+	        				authors[i] = authors[i].substring(1);
+
+
+	        			String[] correctRepresentation = authors[i].split(" ");
+
+	        			if(i >= 6) {
+	        				line += "...";
+	        				break;
+	        			}
+	        			else {
+	        				if(correctRepresentation.length == 1) {
+		        				line = line + correctRepresentation[0] + ".";
+			        		}
+			        		else {
+			        			line += correctRepresentation[correctRepresentation.length-1] + ", ";
+
+			        			for(int j = 0; j < (correctRepresentation.length)-1; j++) {
+			    					line += correctRepresentation[j].toUpperCase().charAt(0) + ".";
+			    					if(j < correctRepresentation.length-2) {
+			    						line += " ";
+			    					}
+			        				
+			        			}
+			        		}
+	        			}
+
+		        		if(i < authors.length-2) {
+		        			line += ", ";
+		        		}
+		        		else if(i < authors.length-1) {
+		        			line += ", & ";
+		        		}
+	        		}
+
+	        		template = template.replace("{{ AUTHOR }}",line);
+	        		line="";
+	        	}
 	        }
 
 	        if(struc.get("editor") != null){
