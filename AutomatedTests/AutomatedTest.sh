@@ -10,43 +10,55 @@ jjtree bibtext2html.jjt
 
 javacc bibtext2html.jj
 
-javac *.java
+javac -encoding ISO-8859-1 *.java
 
 echo ""
 echo ""
 echo "----------------------------------------"
-echo "----- Compiling correctExample.bib -----"
+echo "--- Compiling NO Error&Warning File ----"
 echo "----------------------------------------"
 echo ""
 
-java BibTex files/correctExample.bib files/output.html
+java BibTex files/correctExample.bib files/correctExample.html
 
 echo ""
-echo "----------------------------------------"
-echo "------ Compiling errorExample.bib ------"
-echo "----------------------------------------"
+echo "------------------------------------------"
+echo "------ Compiling ONLY Warning file ------"
+echo "------------------------------------------"
 echo ""
 
-java BibTex files/errorExample.bib files/output
-
-
-echo ""
-echo "----------------------------------------"
-echo "----------- Compiling bug.bib ----------"
-echo "----------------------------------------"
-echo ""
-
-
-java BibTex files/bug.bib files/output
-
+java BibTex files/warningExample.bib files/warningExample.html
 
 
 echo ""
-echo "----------------------------------------"
-echo "-------- Compiling notFound.bib --------"
-echo "----------------------------------------"
+echo "------------------------------------------"
+echo "------ Compiling Error&Warning file ------"
+echo "------------------------------------------"
+echo ""
+
+java BibTex files/errorExample.bib files/errorExample.html
+
+
+echo ""
+echo "-----------------------------------------"
+echo "----------- Compiling Bug file ----------"
+echo "-----------------------------------------"
 echo ""
 
 
-java BibTex files/notFound.bib files/output
+java BibTex files/bugExample.bib files/bugExample.html
 
+
+
+echo ""
+echo "-----------------------------------------"
+echo "------- Compiling Not Found file --------"
+echo "-----------------------------------------"
+echo ""
+
+
+java BibTex files/notFound.bib files/notFound.html
+
+
+echo ""
+echo ""
