@@ -22,7 +22,7 @@ jjtree bibtext2html.jjt
 
 javacc bibtext2html.jj
 
-javac *.java
+javac -encoding ISO-8859-1 *.java
 ```
 
 
