@@ -12,6 +12,7 @@ javacc bibtext2html.jj
 
 javac -encoding ISO-8859-1 *.java
 
+
 echo ""
 echo ""
 echo "----------------------------------------"

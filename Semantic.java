@@ -4,7 +4,7 @@ import JsonParser.JsonSemanticParser;
 
 import java.io.*;
 
-public class Semantic{
+public class Semantic {
 
 	public HashMap<String, HashMap<String, Boolean>> entriesSemantic;
 	public JsonSemanticParser semanticParser;
