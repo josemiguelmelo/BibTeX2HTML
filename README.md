@@ -6,7 +6,7 @@
 - Ricardo Loureiro, ei12034
 - Tiago Ferreira, ei12051
 
-Group G61
+Group G61, COMP-FEUP
 
 
 ##Overview
@@ -122,10 +122,22 @@ Intermediate Representation:
 
 ##HTML Generation
 
-// TODO : complete
+There is currently two templates within the templates folder. They are named Chicago and APA and currently hold the structure of these both. With this templates we can better maintability, scalability and flexibility.
 
-Referir bem os templates!!!
+APA template Example:
+```
+<div class="apa_style">
+	<span class="author"> {{ AUTHOR }} {{ ORGANIZATION }}</span>
+	<span> ({{ YEAR }}{{ MONTH }}) </span>
+	<span> {{ CHAPTER }} </span>
+</div>	
+```
 
+This holds the structure of the html. Afterwards, with Java, all the {{ OBJECT }} are replaced by its matching.
+Some more specifics rules are handled as well in Java, such as different Authors.
+There is also some specific styles that varies depending on the current template, which are handled using CSS.
+ 
+  
 ##Tests
 
 The group created a script (located at AutomatedTests/ folder) with several automated tests. This script automatically compiles the tool developed and runs some examples, to make it easier to test for all possible cases.
