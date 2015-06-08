@@ -36,7 +36,7 @@ echo "------ Compiling Error&Warning file ------"
 echo "------------------------------------------"
 echo ""
 
-java BibTex files/errorExample.bib files/errorExample.html
+java BibTex files/errorWarningExample.bib files/errorExample.html
 
 
 echo ""
