@@ -6,7 +6,7 @@
         ],
 
         "optional" : [
-            "number", "pages", "month", "note", "key"
+            "number", "pages", "month", "note", "key","crossref"
         ] 
            
     },
@@ -19,7 +19,7 @@
 
         "optional" : [
 
-            "volume/number", "series", "address", "month", "note" ,"key","edition","chapter"
+            "volume/number", "series", "address", "month", "note" ,"key","edition","chapter","crossref"
         ] 
            
     },
@@ -31,7 +31,7 @@
         ],
 
         "optional" : [
-            "author", "howpublished", "address", "month", "year", "note" ,"key"
+            "author", "howpublished", "address", "month", "year", "note" ,"key","crossref"
 
         ]
            
@@ -44,7 +44,7 @@
         ],
 
         "optional" : [
-            "editor", "volume/number", "series", "pages", "address", "month", "organization" ,"publisher", "note", "key"
+            "editor", "volume/number", "series", "pages", "address", "month", "organization" ,"publisher", "note", "key","crossref"
 
         ]
            
@@ -57,7 +57,7 @@
         ],
 
         "optional" : [
-            "editor", "volume/number", "series", "pages", "address", "month", "organization" ,"publisher", "note", "key"
+            "editor", "volume/number", "series", "pages", "address", "month", "organization" ,"publisher", "note", "key","crossref"
 
         ]
            
@@ -70,7 +70,7 @@
         ],
 
         "optional" : [
-            "volume/number", "series", "type", "address", "edition", "month" , "note", "key"
+            "volume/number", "series", "type", "address", "edition", "month" , "note", "key","crossref"
 
         ]
            
@@ -83,7 +83,7 @@
         ],
 
         "optional" : [
-            "editor" ,"volume/number", "series", "type", "chapter", "pages", "address", "edition", "month" , "note", "key"
+            "editor" ,"volume/number", "series", "type", "chapter", "pages", "address", "edition", "month" , "note", "key","crossref"
 
         ]
            
@@ -96,7 +96,7 @@
         ],
 
         "optional" : [
-            "author" ,"organization", "address", "edition", "month" , "year", "note", "key"
+            "author" ,"organization", "address", "edition", "month" , "year", "note", "key","crossref"
 
         ]
            
@@ -109,7 +109,7 @@
         ],
 
         "optional" : [
-            "type", "address", "month", "note", "key"
+            "type", "address", "month", "note", "key","crossref"
 
         ]
            
@@ -122,7 +122,7 @@
         ],
 
         "optional" : [
-            "author" ,"title", "howpublished", "month", "year", "note", "key"
+            "author" ,"title", "howpublished", "month", "year", "note", "key","crossref"
 
         ]
            
@@ -135,7 +135,7 @@
         ],
 
         "optional" : [
-            "type", "address", "month", "note", "key","institution"
+            "type", "address", "month", "note", "key","institution","crossref"
 
         ]
            
@@ -148,7 +148,7 @@
         ],
 
         "optional" : [
-            "editor" ,"volume/number", "series", "address", "month", "publisher", "organization", "note", "key"
+            "editor" ,"volume/number", "series", "address", "month", "publisher", "organization", "note", "key","crossref"
 
         ]
            
