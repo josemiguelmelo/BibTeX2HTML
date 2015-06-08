@@ -180,7 +180,7 @@ The implemented tool has several positive points:
 
 ##Negative points
 - If an unknown class is found in bibtex file, an exception is thrown and the analysis stops.
-- // TODO: complete
+- If a string is expected and a number is received instead, an exception is thrown and the analysis stops.
 
 #### Future Improvements
 - Show all error and always complete the analysis, to any error found
