@@ -57,7 +57,7 @@ public class ChicagoGenerator{
 	        if(struc.get("author")!= null) {
 	        	String[] authors = null;
 
-	        	if(struc.get("author").toLowerCase().contains("and".toLowerCase())) {
+	        	if(struc.get("author").toLowerCase().contains("and")) {
 					authors = struc.get("author").split("and");
 					for(int i=0;i<authors.length;i++) {
 						String[] currentAuthor = authors[i].split(",");
@@ -66,6 +66,7 @@ public class ChicagoGenerator{
 					}
 	        	} else {
 	        		authors = struc.get("author").split(",");
+
 	        	}
 
 	        	if(authors.length == 1) {

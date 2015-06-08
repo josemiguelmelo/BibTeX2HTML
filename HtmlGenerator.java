@@ -84,7 +84,7 @@ public class HtmlGenerator{
     		String chicagoRep = new ChicagoGenerator(currentBlock).getHtml();
 			
 			bodyContent += "<div class='panel-body'>" + cleanLatex(repres) + "</div>";
-			bodyContent += "<div class='panel-body'>" + cleanLatex(chicagoRep) + "<br><br></div>";
+			bodyContent += "<div class='panel-body'>" + cleanLatex(chicagoRep) + "</div>";
 
 
     		bodyContent += "<div><table class='table'><thead class='table_header'><tr><td class='param'>Param</td><td class='value_table'>Value</td></tr></thead>";
