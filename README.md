@@ -51,21 +51,29 @@ To test the parser using these files, run the compilation commands and then the 
 
 #### File with no errors or warnings:
 ```
-java -jar BibTex.jar files/correctExample.bib files/output.html
+java -jar BibTex.jar examples/files/correctExample.bib examples/files/correctExample.html
 
 ```
 Expected result from command above:
 
 ```
-HTML file generated successfully. Location: files/output.html
+HTML file generated successfully. Location: files/correctExample.html
 ```
 
 After running the file without errors, an HTML file is generated with all information.
 
 
+
+#### File with warnings and errors:
+```
+java -jar BibTex.jar examples/files/errorWarningExample.bib examples/files/errorWarningExample.html
+
+```
+
+
 #### File with errors and warnings:
 ```
-java -jar BibTex.jar files/errorExample.bib files/output
+java -jar BibTex.jar examples/files/warningExample.bib examples/files/warningExample.html
 
 ```
 
