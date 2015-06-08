@@ -48,7 +48,13 @@ public class BibTex {
 
 		/** get arguments from command **/
 		fileToParse = args[0];
+
 		outputLocation = args[1];
+
+		if(! outputLocation.contains(".html"))
+		{
+			outputLocation += ".html";
+		}
 
 		if(args.length == 3){
 			if(!existsInArray(possibleStyleValues, args[2])){
