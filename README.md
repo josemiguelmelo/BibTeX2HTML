@@ -35,6 +35,12 @@ java BibTex <file_to_parse> <output_location>
 
 ```
 
+You can also run using the .jar file with the following command:
+```
+java -jar BibTex.jar <file_to_parse> <output_location>
+
+```
+
 
 ##Example
 
