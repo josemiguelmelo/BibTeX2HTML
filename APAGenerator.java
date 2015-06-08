@@ -14,7 +14,8 @@ public class APAGenerator{
 
 	private String loadTemplate() throws Exception{
 
-	  	BufferedReader bufferedReader = new BufferedReader(new FileReader(APA_TEMPLATE_FILE));
+	  	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(APA_TEMPLATE_FILE)));
+	 
 	 
 	  	StringBuffer stringBuffer = new StringBuffer();
 	  	String line = null;

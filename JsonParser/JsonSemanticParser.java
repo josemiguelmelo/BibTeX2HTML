@@ -10,6 +10,9 @@ import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.*;
+
+import java.io.*;
 
 public class JsonSemanticParser {
 
@@ -21,7 +24,7 @@ public class JsonSemanticParser {
         this.configInformation = new HashMap<String, HashMap<String, Boolean>>();
     }
 
-    public void parse() throws IOException {
+    public void parse() throws Exception {
         String configInformation = readFile(this.filename, StandardCharsets.UTF_8);
 
         JSONObject jsonObject = new JSONObject(configInformation);
@@ -57,9 +60,20 @@ public class JsonSemanticParser {
         }
     }
 
-    private String readFile(String path,Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded,encoding);
+    private String readFile(String path,Charset encoding) throws Exception {
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(path)));
+     
+     
+        StringBuffer stringBuffer = new StringBuffer();
+        String line = null;
+     
+        while((line =bufferedReader.readLine())!=null){
+     
+            stringBuffer.append(line).append("\n");
+        }
+   
+        return stringBuffer.toString();
     }
 
 

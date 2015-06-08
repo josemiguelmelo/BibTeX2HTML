@@ -16,7 +16,7 @@ public class Semantic {
 
 		entriesSemantic = new HashMap<String, HashMap<String, Boolean>> ();
 
-		this.semanticParser = new JsonSemanticParser("config/config.json");
+		this.semanticParser = new JsonSemanticParser("/config/config.json");
 
 
 		init();
@@ -33,7 +33,7 @@ public class Semantic {
 
             this.entriesSemantic = this.semanticParser.getConfigInformation();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 	}

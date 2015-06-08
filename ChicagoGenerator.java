@@ -15,8 +15,8 @@ public class ChicagoGenerator{
 	}
 
 	private String loadTemplate() throws Exception{
-
-	  	BufferedReader bufferedReader = new BufferedReader(new FileReader(CHICAGO_TEMPLATE_FILE));
+	 
+	  	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(CHICAGO_TEMPLATE_FILE)));
 	 
 	  	StringBuffer stringBuffer = new StringBuffer();
 	  	String line = null;

@@ -45,8 +45,8 @@ public class HtmlGenerator{
 	}
 
 	private String loadTemplate() throws Exception{
-
-	  	BufferedReader bufferedReader = new BufferedReader(new FileReader(this.templateFileName));
+		
+	  	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(templateFileName)));
 	 
 	  	StringBuffer stringBuffer = new StringBuffer();
 	  	String line = null;
