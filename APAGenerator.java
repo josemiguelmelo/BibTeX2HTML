@@ -2,8 +2,6 @@ import java.util.*;
 
 import java.io.*;
 
-
-
 public class APAGenerator{
 
 	private HashMap<String , HashMap<String, String>> representation;
@@ -304,7 +302,7 @@ public class APAGenerator{
 	        line="";
 
 	        if(struc.get("crossref") != null)
-	        	line = line + "ref to." + struc.get("crossref") + ".";
+	        	line = line + "ref. to <a href=#" + struc.get("crossref")+">"+ struc.get("crossref")+"</a>" + ". ";
 	        template = template.replace("{{ CROSSREF }}",line);
 	        line="";
 

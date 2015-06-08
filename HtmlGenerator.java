@@ -73,7 +73,7 @@ public class HtmlGenerator{
 		while (it.hasNext()) {
 	        Map.Entry classStructure = (Map.Entry)it.next();
 
-	        bodyContent += "<div class='class panel panel-default'><div class='panel-heading'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
+	        bodyContent += "<div id=" + ((String)classStructure.getKey()).split("-")[1] + " class='class panel panel-default'><div class='panel-heading'><h2>" + ((String)classStructure.getKey()).split("-")[0] + " </h2></div>";
     		bodyContent += "<div class='panel-body'><label>ID = </label>"  + " "+ ((String)classStructure.getKey()).split("-")[1] +  "</div>";
 
     			/** current block hashmap **/

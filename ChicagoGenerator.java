@@ -205,7 +205,7 @@ public class ChicagoGenerator{
 	        line="";
 
 	        if(struc.get("crossref") != null)
-	        	line = line + "referes " + struc.get("crossref") + ". ";
+	        	line = line + "referes <a href=#" + struc.get("crossref")+">"+ struc.get("crossref")+"</a>" + ". ";
 	        template = template.replace("{{ CROSSREF }}", line);
 	        line="";
 
