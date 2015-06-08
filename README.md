@@ -51,7 +51,7 @@ To test the parser using these files, run the compilation commands and then the 
 
 #### File with no errors or warnings:
 ```
-java BibTex files/correctExample.bib files/output.html
+java -jar BibTex.jar files/correctExample.bib files/output.html
 
 ```
 Expected result from command above:
@@ -65,7 +65,7 @@ After running the file without errors, an HTML file is generated with all inform
 
 #### File with errors and warnings:
 ```
-java BibTex files/errorExample.bib files/output
+java -jar BibTex.jar files/errorExample.bib files/output
 
 ```
 
