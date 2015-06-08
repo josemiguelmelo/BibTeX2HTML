@@ -1,14 +1,19 @@
-#Authors
+# BibTex2HTML
+
+##Authors
 
 - José Miguel Melo, ei12050
 - Ricardo Loureiro, ei12034
 - Tiago Ferreira, ei12051
 
-#Overview
+Group G61
+
+
+##Overview
 
 A tool to parse bibtex files (http://www.bibtex.org/) and output the bibliographical entries in HTML. 
 
-# Compilation
+##Compilation
 
 This project needs JavaCC to be compiled. After installing JavaCC, use the following commands within the source directory:
 
@@ -21,7 +26,7 @@ javac *.java
 ```
 
 
-#Running
+##Running
 
 You should run the BibTex class. To do so, run the following command:
 
@@ -31,7 +36,7 @@ java BibTex <file_to_parse> <output_location>
 ```
 
 
-#Example
+##Example
 
 
 As example, there are 2 example files inside files/ directory (correctExample.bib and errorExample.bib).
@@ -59,7 +64,7 @@ java BibTex files/errorExample.bib files/output
 ```
 
 
-#Grammar
+##Grammar
 ```
 S ---> Class "{" Id Body "}"
 Class ---> "@article" | "@book" | ...
@@ -68,7 +73,7 @@ Body ---> { "," Params? }
 Params ---> "author" "=" STRING | "title" "=" STRING | ....
 ```
 
-#Lexical and Sintatic Analysis
+##Lexical and Sintatic Analysis
 
 It is implemented in *bibtext2html.jjt*.
 
@@ -76,7 +81,7 @@ To analyze the lexical and sintatic part, the code goes through the tree and che
 
 If any error is found, an exception is thrown.
 
-#Semantic Analysis
+##Semantic Analysis
 
 It is implemented in *Semantic.java*.
 To analyze the semantic part, the code goes through the language tree and checks, using a Semantic object created, all parameters inserted:
@@ -87,7 +92,7 @@ To analyze the semantic part, the code goes through the language tree and checks
 - if crossref are valid - prints error if crossref id not found or duplicated
 	
 	
-#Intermediate Representation
+##Intermediate Representation
 
 To represent the compiled file, it was used an *HashMap\<String, HashMap\<String,String\>\>*, where the String contains the class name and the id separated by '-' and the HashMap<String, String> has all the parameters inserted.
 
@@ -115,17 +120,24 @@ Intermediate Representation:
 ```
 
 
-#HTML Generation
+##HTML Generation
 
 // TODO : complete
 
 Referir bem os templates!!!
 
-#Tests
+##Tests
 
-// TODO : complete
+The group created a script (located at AutomatedTests/ folder) with several automated tests. This script automatically compiles the tool developed and runs some examples, to make it easier to test for all possible cases.
 
-#Architecture
+With this script it is tested:
+- a bibtex file without errors - compiles and generates html file
+- a bibtex file with warnings and no errors - compiles and generates html file
+- a bibtex file with errors and warnings - ends compilation but doesn't generate html file
+- a bibtex file that doesn't exist - prints an error message while opening the input file
+
+
+##Architecture
 
 To compile the bibtex file the following steps are done:
 
@@ -142,7 +154,7 @@ To compile the bibtex file the following steps are done:
 (2) - To generate the HTML it is used some templates (located at templates/ folder), which are parsed and the template's parameters replaced by the values compiled from the bibtex file.
 
 
-#Positive points
+##Positive points
 
 The implemented tool has several positive points:
 
@@ -154,11 +166,11 @@ The implemented tool has several positive points:
 - Semantic, sintatic and lexical analysis are well separated, which makes easier to scale the compiler and implement new features and validations
 
 
-#Negative points
+##Negative points
 - If an unknown class is found in bibtex file, an exception is thrown and the analysis stops.
 - // TODO: complete
 
-### Future Improvements
+#### Future Improvements
 - Show all error and always complete the analysis, to any error found
 - Add more output styles (currently only Chicago and APA implemented)
 - Integrate with Amazon and other services to get images and information about all objects/classes inserted in the bibtex file
